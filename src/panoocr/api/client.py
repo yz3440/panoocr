@@ -12,6 +12,7 @@ from ..image.perspectives import (
     DEFAULT_IMAGE_PERSPECTIVES,
     ZOOMED_IN_IMAGE_PERSPECTIVES,
     ZOOMED_OUT_IMAGE_PERSPECTIVES,
+    WIDEANGLE_IMAGE_PERSPECTIVES,
     combine_perspectives,
 )
 from ..ocr.models import FlatOCRResult, SphereOCRResult
@@ -34,6 +35,8 @@ def _get_perspectives_for_preset(preset: PerspectivePreset) -> List[PerspectiveM
         return ZOOMED_IN_IMAGE_PERSPECTIVES
     elif preset == PerspectivePreset.ZOOMED_OUT:
         return ZOOMED_OUT_IMAGE_PERSPECTIVES
+    elif preset == PerspectivePreset.WIDEANGLE:
+        return WIDEANGLE_IMAGE_PERSPECTIVES
     else:
         raise ValueError(f"Unknown perspective preset: {preset}")
 
@@ -216,14 +219,59 @@ class PanoOCR:
             self.perspectives = original_perspectives
             self._preset_name = original_preset_name
 
+    def _is_simple_ring_arrangement(
+        self,
+        perspectives: List[PerspectiveMetadata],
+    ) -> bool:
+        """Check if perspectives form a simple horizontal ring.
+
+        A simple ring is a set of perspectives that all have the same pitch
+        and are sorted monotonically by yaw. This arrangement allows for
+        fast sequential pairwise deduplication.
+
+        Args:
+            perspectives: List of perspective configurations.
+
+        Returns:
+            True if perspectives form a simple ring, False otherwise.
+        """
+        if len(perspectives) <= 1:
+            return True
+
+        # Check all have the same pitch (within tolerance)
+        pitches = [p.pitch_offset for p in perspectives]
+        first_pitch = pitches[0]
+        if not all(abs(pitch - first_pitch) < 0.01 for pitch in pitches):
+            return False
+
+        # Check yaw values are monotonically increasing (allowing wrap-around)
+        yaws = [p.yaw_offset for p in perspectives]
+
+        for i in range(len(yaws) - 1):
+            diff = yaws[i + 1] - yaws[i]
+            # Normalize difference to handle wrap-around at ±180°
+            if diff < -180:
+                diff += 360
+            elif diff > 180:
+                diff -= 360
+
+            # All differences should be positive (monotonic increasing)
+            if diff <= 0:
+                return False
+
+        return True
+
     def _deduplicate_results(
         self,
         all_results: List[List[SphereOCRResult]],
     ) -> List[SphereOCRResult]:
         """Deduplicate OCR results across perspectives.
 
-        Compares results from adjacent perspectives and removes duplicates,
-        keeping the result with longer text or higher confidence.
+        Uses an adaptive strategy:
+        - Sequential pairwise (fast): When perspectives form a simple ring
+          (same pitch, sorted by yaw)
+        - Incremental master list (slow): For arbitrary perspective sets
+          (multiple pitch levels, custom arrangements)
 
         Args:
             all_results: List of result lists, one per perspective.
@@ -234,25 +282,30 @@ class PanoOCR:
         if not all_results:
             return []
 
-        # Deduplicate between adjacent perspective pairs
-        for i in range(len(all_results) - 1):
-            all_results[i], all_results[i + 1] = (
-                self._dedup_engine.remove_duplication_for_two_lists(
-                    all_results[i], all_results[i + 1]
+        # Check if we can use fast sequential pairwise strategy
+        if self._is_simple_ring_arrangement(self.perspectives):
+            # Fast path: sequential pairwise + wrap-around
+            for i in range(len(all_results) - 1):
+                all_results[i], all_results[i + 1] = (
+                    self._dedup_engine.remove_duplication_for_two_lists(
+                        all_results[i], all_results[i + 1]
+                    )
                 )
-            )
 
-        # Handle wrap-around (last and first perspectives are adjacent)
-        if len(all_results) > 1:
-            all_results[-1], all_results[0] = (
-                self._dedup_engine.remove_duplication_for_two_lists(
-                    all_results[-1], all_results[0]
+            # Handle wrap-around (last and first perspectives are adjacent)
+            if len(all_results) > 1:
+                all_results[-1], all_results[0] = (
+                    self._dedup_engine.remove_duplication_for_two_lists(
+                        all_results[-1], all_results[0]
+                    )
                 )
-            )
 
-        # Flatten results
-        deduplicated = []
-        for results in all_results:
-            deduplicated.extend(results)
+            # Flatten results
+            deduplicated = []
+            for results in all_results:
+                deduplicated.extend(results)
 
-        return deduplicated
+            return deduplicated
+        else:
+            # Slow path: incremental master list (handles arbitrary arrangements)
+            return self._dedup_engine.deduplicate_frames(all_results)

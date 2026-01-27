@@ -21,6 +21,7 @@ class PerspectivePreset(str, Enum):
     DEFAULT = "default"
     ZOOMED_IN = "zoomed_in"
     ZOOMED_OUT = "zoomed_out"
+    WIDEANGLE = "wideangle"
 
 
 @dataclass(frozen=True)

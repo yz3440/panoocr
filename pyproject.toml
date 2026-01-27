@@ -1,6 +1,6 @@
 [project]
 name = "panoocr"
-version = "0.2.1"
+version = "0.3.0"
 description = "PanoOCR is a Python library for performing Optical Character Recognition (OCR) on equirectangular panorama images with automatic perspective projection and deduplication."
 readme = "README.md"
 license = { text = "MIT" }

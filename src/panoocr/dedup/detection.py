@@ -256,3 +256,86 @@ class SphereOCRDuplicationDetectionEngine:
             ocr_results_1.pop(index)
 
         return ocr_results_0, ocr_results_1
+
+    def _select_best_result(
+        self,
+        result_1: SphereOCRResult,
+        result_2: SphereOCRResult,
+    ) -> SphereOCRResult:
+        """Select the best result from two duplicates.
+
+        Prefers longer text, or higher confidence if equal length.
+
+        Args:
+            result_1: First OCR result.
+            result_2: Second OCR result.
+
+        Returns:
+            The better of the two results.
+        """
+        if len(result_1.text) == len(result_2.text):
+            # Equal length: prefer higher confidence
+            return result_1 if result_1.confidence >= result_2.confidence else result_2
+        elif len(result_1.text) > len(result_2.text):
+            return result_1
+        else:
+            return result_2
+
+    def deduplicate_frames(
+        self,
+        frames: List[List[SphereOCRResult]],
+    ) -> List[SphereOCRResult]:
+        """Deduplicate OCR results across multiple frames using incremental merging.
+
+        Processes frames one by one, maintaining a master list. Each result from
+        a new frame is compared against the entire master list. When duplicates
+        are found, keeps the result with longer text or higher confidence.
+
+        This approach is slower than pairwise deduplication but handles arbitrary
+        perspective arrangements correctly (e.g., multiple pitch levels, custom
+        arrangements).
+
+        Args:
+            frames: List of frames, each containing a list of OCR results.
+
+        Returns:
+            Deduplicated list of sphere OCR results.
+        """
+        if not frames:
+            return []
+
+        # Start with the first frame as the master list
+        master_list: List[SphereOCRResult] = list(frames[0])
+
+        # Process each subsequent frame
+        for frame_results in frames[1:]:
+            for new_result in frame_results:
+                # Check for overlaps with existing master list
+                duplicate_indices = []
+
+                for i, master_result in enumerate(master_list):
+                    if self.check_duplication(new_result, master_result):
+                        duplicate_indices.append(i)
+
+                if not duplicate_indices:
+                    # No duplicates found, add to master list
+                    master_list.append(new_result)
+                else:
+                    # Found duplicates - select best result among all candidates
+                    candidates = [new_result] + [
+                        master_list[i] for i in duplicate_indices
+                    ]
+
+                    # Find the best result
+                    best_result = candidates[0]
+                    for candidate in candidates[1:]:
+                        best_result = self._select_best_result(best_result, candidate)
+
+                    # Remove all duplicates from master list (in reverse order)
+                    for i in sorted(duplicate_indices, reverse=True):
+                        master_list.pop(i)
+
+                    # Add the best result
+                    master_list.append(best_result)
+
+        return master_list
