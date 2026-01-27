@@ -56,6 +56,9 @@ from .ocr.utils import visualize_ocr_results, visualize_sphere_ocr_results
 from .geometry import (
     uv_to_yaw_pitch,
     yaw_pitch_to_uv,
+    perspective_to_sphere,
+    sphere_to_perspective,
+    calculate_spherical_centroid,
     normalize_yaw,
     yaw_to_equirectangular_x,
     pitch_to_equirectangular_y,
@@ -96,6 +99,9 @@ __all__ = [
     # Geometry utilities
     "uv_to_yaw_pitch",
     "yaw_pitch_to_uv",
+    "perspective_to_sphere",
+    "sphere_to_perspective",
+    "calculate_spherical_centroid",
     "normalize_yaw",
     "yaw_to_equirectangular_x",
     "pitch_to_equirectangular_y",
