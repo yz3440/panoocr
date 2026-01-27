@@ -2,6 +2,8 @@
 
 PanoOCR is a Python library for performing Optical Character Recognition (OCR) on equirectangular panorama images with automatic perspective projection and deduplication.
 
+https://github.com/user-attachments/assets/57507c48-ec88-4d4a-bf68-067eefc9d42f
+
 ## Features
 
 - **Multiple OCR Engines**: Support for MacOCR (Apple Vision), EasyOCR, PaddleOCR, Florence-2, and TrOCR
