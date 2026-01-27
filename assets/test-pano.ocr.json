@@ -1,0 +1,403 @@
+{
+  "image_path": "assets/test-pano.jpg",
+  "perspective_preset": "default",
+  "perspective_presets": null,
+  "results": [
+    {
+      "text": "MO",
+      "confidence": 0.5,
+      "yaw": -141.79616764043703,
+      "pitch": -2.9983412886232017,
+      "width": 1.0868901812501317,
+      "height": 0.6192085471103206,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "MO",
+      "confidence": 1.0,
+      "yaw": -140.98034988185833,
+      "pitch": 0.8968016333756894,
+      "width": 1.7741414449861752,
+      "height": 1.1035414937977026,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "E4SH 40",
+      "confidence": 0.30000001192092896,
+      "yaw": -75.97170227687819,
+      "pitch": 10.071062984755628,
+      "width": 6.034565497660848,
+      "height": 1.8056434533135093,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "UHALR",
+      "confidence": 0.30000001192092896,
+      "yaw": -75.03405535903771,
+      "pitch": -5.741401719707529,
+      "width": 1.674030234282439,
+      "height": 0.6146936966633589,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "U HAUL",
+      "confidence": 0.5,
+      "yaw": -72.27139018341349,
+      "pitch": -5.843833095484308,
+      "width": 2.3214434391528442,
+      "height": 0.7061823553339437,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "\u2022 FUEL EFFICIENT",
+      "confidence": 1.0,
+      "yaw": -73.72097044371787,
+      "pitch": -11.814119598842817,
+      "width": 6.065207224272616,
+      "height": 0.8795207049070957,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "\u2022 EASY TO DRIVE",
+      "confidence": 1.0,
+      "yaw": -73.59532346646536,
+      "pitch": -12.722394291778064,
+      "width": 6.280613905827641,
+      "height": 0.8533629365717488,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "\u2022 TOW YOUR CAR",
+      "confidence": 1.0,
+      "yaw": -73.43673411971265,
+      "pitch": -13.665504902290682,
+      "width": 6.5865678997820805,
+      "height": 0.922116608183229,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "U HAUL",
+      "confidence": 0.5,
+      "yaw": -68.81058852444947,
+      "pitch": -1.7931640547168204,
+      "width": 6.204512525373912,
+      "height": 1.2642021833671586,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "RIGHT EQUIPMENT... LOWEST COST!",
+      "confidence": 1.0,
+      "yaw": -69.15530840053522,
+      "pitch": -3.9949551815831854,
+      "width": 14.12831065184348,
+      "height": 0.9611550164059319,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "til As Lo",
+      "confidence": 0.5,
+      "yaw": -65.56900097298161,
+      "pitch": -5.912099916193134,
+      "width": 2.4804473094214474,
+      "height": 0.550329408287177,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "$$1925",
+      "confidence": 0.5,
+      "yaw": -65.60345769053747,
+      "pitch": -7.646700997872887,
+      "width": 7.912645047920231,
+      "height": 3.048916394022312,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "RESERVE TODAY e",
+      "confidence": 1.0,
+      "yaw": -64.73775068230434,
+      "pitch": -11.81638424329625,
+      "width": 5.841297276637256,
+      "height": 1.0089285391217757,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "unaul.coms",
+      "confidence": 0.30000001192092896,
+      "yaw": -64.57175489975621,
+      "pitch": -12.720134174937979,
+      "width": 5.759365806811767,
+      "height": 1.0350279616883888,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "16861-",
+      "confidence": 1.0,
+      "yaw": -75.38375875860618,
+      "pitch": -17.634670910076437,
+      "width": 1.7598718745613064,
+      "height": 0.7518964599523592,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "wel",
+      "confidence": 0.5,
+      "yaw": -59.48090096111872,
+      "pitch": -1.3450651559413231,
+      "width": 1.6234435952571529,
+      "height": 0.6205651724536494,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "HI STATE INSPERTON",
+      "confidence": 0.5,
+      "yaw": -50.00413975759483,
+      "pitch": 11.8777026580804,
+      "width": 5.637515436362078,
+      "height": 2.4422557302199337,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "718-443-5959",
+      "confidence": 1.0,
+      "yaw": -49.83271562659677,
+      "pitch": 4.733507073470676,
+      "width": 4.812525173327108,
+      "height": 1.4312007993270441,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "TU",
+      "confidence": 0.5,
+      "yaw": -64.24877602576385,
+      "pitch": 0.20697023114273164,
+      "width": 0.6149194335890904,
+      "height": 0.5519115272182312,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "TeD",
+      "confidence": 0.30000001192092896,
+      "yaw": -59.07858439499278,
+      "pitch": -1.3819321909542075,
+      "width": 2.580586811736266,
+      "height": 1.2817038061742128,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "Sodel A",
+      "confidence": 0.5,
+      "yaw": -44.02613897573245,
+      "pitch": 11.42007264308672,
+      "width": 2.601814179105138,
+      "height": 1.248531948005521,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "AUTO:",
+      "confidence": 1.0,
+      "yaw": -43.966208127235696,
+      "pitch": 9.456923297368501,
+      "width": 2.7771989726156234,
+      "height": 1.3948079238754119,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "REPAIB",
+      "confidence": 0.5,
+      "yaw": -44.09995258061363,
+      "pitch": 8.297058306100624,
+      "width": 3.3057469699960844,
+      "height": 1.4455777756734998,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "THDE",
+      "confidence": 0.30000001192092896,
+      "yaw": -44.34462003021587,
+      "pitch": 6.933976651054136,
+      "width": 2.138173682335142,
+      "height": 0.8158051507462565,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "RITE",
+      "confidence": 0.30000001192092896,
+      "yaw": -4.543815050420167,
+      "pitch": 16.02300923308356,
+      "width": 2.193573535282078,
+      "height": 1.2109134932884498,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "NEW YORK STATE INSPECTION",
+      "confidence": 1.0,
+      "yaw": -2.688649297032087,
+      "pitch": 10.171352734887257,
+      "width": 20.566981362374083,
+      "height": 1.203060471857965,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "WE SPECIALIZE IN TRANSMISSIONS",
+      "confidence": 1.0,
+      "yaw": -0.10348557837867166,
+      "pitch": 8.591429435753291,
+      "width": 25.313389493611012,
+      "height": 1.2915254062867607,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "AUTEARS EXPERIENGEP ALLT KEENL",
+      "confidence": 0.5,
+      "yaw": 1.2424929941911877,
+      "pitch": 6.288121249628639,
+      "width": 28.390793955614306,
+      "height": 3.6702590065686316,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "20YEARS EXPERIENCEXP",
+      "confidence": 0.5,
+      "yaw": -2.5853827751370746,
+      "pitch": 5.464601379200576,
+      "width": 20.503542128748418,
+      "height": 1.4468001861385398,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "Phone. 718-443-5959 / Fax. 718",
+      "confidence": 1.0,
+      "yaw": -2.6542290784600824,
+      "pitch": 3.8919590977022978,
+      "width": 20.634728597085996,
+      "height": 1.4420480962602755,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "ASE",
+      "confidence": 0.5,
+      "yaw": 18.134537337822138,
+      "pitch": 8.255727020108395,
+      "width": 2.242852373041522,
+      "height": 1.2837396896973523,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "009- POt",
+      "confidence": 0.30000001192092896,
+      "yaw": 43.1205219960638,
+      "pitch": -4.063604858150021,
+      "width": 1.1482171002546728,
+      "height": 9.042467049849302,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "ModellA",
+      "confidence": 0.5,
+      "yaw": 44.99462776519234,
+      "pitch": 10.895309695780458,
+      "width": 5.059585296053581,
+      "height": 1.8772898332235073,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "NY STI",
+      "confidence": 0.5,
+      "yaw": 49.74942770434572,
+      "pitch": 4.166557551926882,
+      "width": 4.246174957402986,
+      "height": 1.5783039949603346,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "MY STATE",
+      "confidence": 1.0,
+      "yaw": 64.21802408284924,
+      "pitch": 6.3588757573355945,
+      "width": 3.8745281903426694,
+      "height": 1.1674609102096527,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "718-443-5959",
+      "confidence": 1.0,
+      "yaw": 64.28047971642636,
+      "pitch": 4.485533529362484,
+      "width": 4.665124124703173,
+      "height": 1.118843487179877,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "WHEE",
+      "confidence": 1.0,
+      "yaw": 49.81834733839834,
+      "pitch": 13.230106712592807,
+      "width": 4.638820549810369,
+      "height": 2.8695406931317766,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "IINSPECTION",
+      "confidence": 1.0,
+      "yaw": 64.15776294137301,
+      "pitch": 5.22870501854126,
+      "width": 5.153250154355688,
+      "height": 0.9578220558462887,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "14: 248 WISE, 13O",
+      "confidence": 0.5,
+      "yaw": 88.55151078954749,
+      "pitch": 6.933976637929276,
+      "width": 12.089578151484575,
+      "height": 1.903408925029603,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "312 -",
+      "confidence": 0.5,
+      "yaw": 95.91209991243892,
+      "pitch": 6.118397117501668,
+      "width": 1.774581555133488,
+      "height": 0.8248603403929966,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "ABI",
+      "confidence": 0.5,
+      "yaw": 135.7933386044214,
+      "pitch": 0.5174137544770004,
+      "width": 2.13804357889361,
+      "height": 0.8967834153230778,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "786-5050",
+      "confidence": 1.0,
+      "yaw": 135.51465614922202,
+      "pitch": -0.5587354206386949,
+      "width": 4.780567570386416,
+      "height": 1.2660691025856525,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "SUDA",
+      "confidence": 0.30000001192092896,
+      "yaw": 136.62084129607518,
+      "pitch": -4.78368465921252,
+      "width": 12.428421501339688,
+      "height": 4.861393486876129,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    },
+    {
+      "text": "Shones",
+      "confidence": 0.30000001192092896,
+      "yaw": 155.550193682569,
+      "pitch": 0.5512491429633423,
+      "width": 8.866541866925079,
+      "height": 3.381990741571096,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    }
+  ]
+}
