@@ -21,7 +21,7 @@ Install OCR engine dependencies:
     - All engines: pip install "panoocr[full]"
 """
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"
 
 # Pipeline-first public API
 from .api import (
@@ -41,6 +41,7 @@ from .image.perspectives import (
     DEFAULT_IMAGE_PERSPECTIVES,
     ZOOMED_IN_IMAGE_PERSPECTIVES,
     ZOOMED_OUT_IMAGE_PERSPECTIVES,
+    WIDEANGLE_IMAGE_PERSPECTIVES,
 )
 
 # OCR models
@@ -87,6 +88,7 @@ __all__ = [
     "DEFAULT_IMAGE_PERSPECTIVES",
     "ZOOMED_IN_IMAGE_PERSPECTIVES",
     "ZOOMED_OUT_IMAGE_PERSPECTIVES",
+    "WIDEANGLE_IMAGE_PERSPECTIVES",
     # OCR models
     "BoundingBox",
     "FlatOCRResult",

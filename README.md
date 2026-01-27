@@ -135,10 +135,10 @@ pano = PanoOCR(engine, perspectives=PerspectivePreset.ZOOMED_IN)
 
 # Or create custom perspectives
 custom_perspectives = generate_perspectives(
-    pixel_size=1024,
-    horizontal_fov=30,
-    vertical_fov=30,
-    pitch_offsets=[0, 15, -15],  # Multiple rows
+    fov=30,              # Horizontal FOV in degrees
+    resolution=1024,     # Pixel width/height
+    overlap=0.5,         # 50% overlap between adjacent views
+    pitch_angles=[0, 15, -15],  # Multiple rows
 )
 pano = PanoOCR(engine, perspectives=custom_perspectives)
 ```

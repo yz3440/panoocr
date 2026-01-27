@@ -2,56 +2,81 @@
 
 from __future__ import annotations
 
-from typing import List
+from typing import List, Optional
 
 from .models import PerspectiveMetadata
 
 
 def generate_perspectives(
-    pixel_size: int,
-    horizontal_fov: float,
-    vertical_fov: float | None = None,
-    pitch_offsets: List[float] | None = None,
+    fov: float = 45,
+    resolution: int = 2048,
+    overlap: float = 0.5,
+    pitch_angles: Optional[List[float]] = None,
+    vertical_fov: Optional[float] = None,
 ) -> List[PerspectiveMetadata]:
-    """Generate a list of perspective configurations.
+    """Generate a set of perspective views covering 360° horizontally.
 
-    Creates perspectives evenly distributed around the panorama horizontally,
-    with 50% overlap between adjacent perspectives.
+    This is the main API for creating custom perspective configurations.
 
     Args:
-        pixel_size: Width and height of each perspective image in pixels.
-        horizontal_fov: Horizontal field of view in degrees.
-        vertical_fov: Vertical field of view in degrees. Defaults to horizontal_fov.
-        pitch_offsets: List of vertical offsets in degrees. Defaults to [0].
+        fov: Horizontal field of view in degrees (default: 45°).
+        resolution: Pixel width and height of each perspective (default: 2048).
+        overlap: Overlap ratio between adjacent perspectives, 0-1 (default: 0.5).
+            - 0.0 = no overlap (perspectives touch at edges)
+            - 0.5 = 50% overlap (recommended for good coverage)
+            - 1.0 = 100% overlap (each point covered by 2 perspectives)
+        pitch_angles: List of pitch angles in degrees (default: [0]).
+            Use multiple values to cover up/down, e.g., [-30, 0, 30].
+        vertical_fov: Vertical field of view in degrees (default: same as fov).
 
     Returns:
-        List of PerspectiveMetadata configurations.
+        List of PerspectiveMetadata objects covering the panorama.
+
+    Examples:
+        >>> # Standard 45° FOV with 50% overlap (16 perspectives)
+        >>> perspectives = generate_perspectives(fov=45)
+
+        >>> # Wide angle for large text (8 perspectives)
+        >>> perspectives = generate_perspectives(fov=90, resolution=2500)
+
+        >>> # Zoomed in for small text (32 perspectives)
+        >>> perspectives = generate_perspectives(fov=22.5, resolution=1024)
+
+        >>> # Cover ceiling and floor too
+        >>> perspectives = generate_perspectives(fov=60, pitch_angles=[-45, 0, 45])
+
+        >>> # Dense coverage with 75% overlap
+        >>> perspectives = generate_perspectives(fov=45, overlap=0.75)
     """
+    if pitch_angles is None:
+        pitch_angles = [0]
     if vertical_fov is None:
-        vertical_fov = horizontal_fov
-    if pitch_offsets is None:
-        pitch_offsets = [0]
+        vertical_fov = fov
+
+    # Calculate yaw interval based on FOV and overlap
+    # With 50% overlap, interval = FOV / 2
+    # With 0% overlap, interval = FOV
+    yaw_interval = fov * (1 - overlap)
+    if yaw_interval <= 0:
+        yaw_interval = fov * 0.1  # Minimum 10% step to avoid infinite loop
+
+    # Generate yaw angles centered at 0
+    num_yaw = int(round(360 / yaw_interval))
+    yaw_angles = [i * (360 / num_yaw) - 180 for i in range(num_yaw)]
 
     perspectives = []
-
-    # Calculate number of yaw positions (2x overlap = interval is half of FOV)
-    yaw_offset_count = round(360 / horizontal_fov * 2)
-    interval = 360 / yaw_offset_count
-
-    # Generate yaw offsets from -180 to 180
-    yaw_offsets = [k * interval - 180 for k in range(yaw_offset_count)]
-
-    for yaw_offset in yaw_offsets:
-        for pitch_offset in pitch_offsets:
-            perspective = PerspectiveMetadata(
-                pixel_width=pixel_size,
-                pixel_height=pixel_size,
-                horizontal_fov=horizontal_fov,
-                vertical_fov=vertical_fov,
-                yaw_offset=yaw_offset,
-                pitch_offset=pitch_offset,
+    for yaw in yaw_angles:
+        for pitch in pitch_angles:
+            perspectives.append(
+                PerspectiveMetadata(
+                    pixel_width=resolution,
+                    pixel_height=resolution,
+                    horizontal_fov=fov,
+                    vertical_fov=vertical_fov,
+                    yaw_offset=yaw,
+                    pitch_offset=pitch,
+                )
             )
-            perspectives.append(perspective)
 
     return perspectives
 
@@ -75,48 +100,18 @@ def combine_perspectives(
     return combined
 
 
-def _initialize_default_perspectives() -> List[PerspectiveMetadata]:
-    """Initialize default perspective configurations.
+# =============================================================================
+# Pre-defined perspective sets (for backwards compatibility and convenience)
+# =============================================================================
 
-    45° FOV, 2048x2048 pixels, 22.5° intervals (16 perspectives).
-    """
-    return generate_perspectives(
-        pixel_size=2048,
-        horizontal_fov=45,
-        vertical_fov=45,
-    )
+DEFAULT_IMAGE_PERSPECTIVES = generate_perspectives(fov=45, resolution=2048, overlap=0.5)
+"""List[PerspectiveMetadata]: Default perspectives with 45° FOV (16 perspectives)."""
 
+ZOOMED_IN_IMAGE_PERSPECTIVES = generate_perspectives(fov=22.5, resolution=1024, overlap=0.5)
+"""List[PerspectiveMetadata]: Zoomed-in perspectives with 22.5° FOV (32 perspectives)."""
 
-def _initialize_zoomed_in_perspectives() -> List[PerspectiveMetadata]:
-    """Initialize zoomed-in perspective configurations.
+ZOOMED_OUT_IMAGE_PERSPECTIVES = generate_perspectives(fov=60, resolution=2500, overlap=0.5)
+"""List[PerspectiveMetadata]: Zoomed-out perspectives with 60° FOV (12 perspectives)."""
 
-    22.5° FOV, 1024x1024 pixels, for detecting smaller text.
-    """
-    return generate_perspectives(
-        pixel_size=1024,
-        horizontal_fov=22.5,
-        vertical_fov=22.5,
-    )
-
-
-def _initialize_zoomed_out_perspectives() -> List[PerspectiveMetadata]:
-    """Initialize zoomed-out perspective configurations.
-
-    60° FOV, 2500x2500 pixels, for detecting larger text or wider context.
-    """
-    return generate_perspectives(
-        pixel_size=2500,
-        horizontal_fov=60,
-        vertical_fov=60,
-    )
-
-
-# Pre-defined perspective sets
-DEFAULT_IMAGE_PERSPECTIVES = _initialize_default_perspectives()
-"""Default perspectives: 45° FOV, 2048x2048px, 16 positions."""
-
-ZOOMED_IN_IMAGE_PERSPECTIVES = _initialize_zoomed_in_perspectives()
-"""Zoomed-in perspectives: 22.5° FOV, 1024x1024px, for small text."""
-
-ZOOMED_OUT_IMAGE_PERSPECTIVES = _initialize_zoomed_out_perspectives()
-"""Zoomed-out perspectives: 60° FOV, 2500x2500px, for large text."""
+WIDEANGLE_IMAGE_PERSPECTIVES = generate_perspectives(fov=90, resolution=2500, overlap=0.5)
+"""List[PerspectiveMetadata]: Wideangle perspectives with 90° FOV (8 perspectives)."""
