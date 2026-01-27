@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.1, mkdocs-terminal-4.7.8">
+    
+    <meta name="description" content="OCR for equirectangular panorama images with automatic perspective projection and deduplication"> 
+    
+    <meta name="author" content="Yufeng Zhao"> 
+    
+    <link rel="canonical" href="https://yz3440.github.io/panoocr/examples/"><link rel="icon" type="image/png" sizes="192x192" href="../img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="../img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="../img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png" />
+
+
+    
+ 
+<title>Examples - PanoOCR</title>
+
+
+<link href="../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../css/normalize.css" rel="stylesheet">
+<link href="../css/terminal.css" rel="stylesheet">
+<link href="../css/theme.css" rel="stylesheet">
+<link href="../css/theme.tile_grid.css" rel="stylesheet">
+<link href="../css/theme.footer.css" rel="stylesheet">
+<!-- default color palette -->
+<link href="../css/palettes/default.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+
+
+    
+    <link href="../assets/_mkdocstrings.css" rel="stylesheet">  
+    
+    
+
+    
+    <!-- search css support -->
+<link href="../css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = "..",
+    shortcuts = "{}";
+</script>
+<script src="../js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="../js/bootstrap/bootstrap.min.js" defer></script>
+<script src="../js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="../search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="https://yz3440.github.io/panoocr/" class="no-style">PanoOCR</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href=".." class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="./" class="menu-item active" property="item" typeof="WebPage">
+                        <span property="name">Examples</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                
+                    
+                    
+
+
+<li property="itemListElement" typeof="ListItem">
+    <a href="#" class="menu-item" data-toggle="modal" data-target="#mkdocs_search_modal" property="item" typeof="SearchAction">
+        <i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+    </a>
+    <meta property="position" content="2">
+</li>
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="..">Home</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        <span class="terminal-mkdocs-side-nav-item--active">Examples</span>
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        
+            
+            
+            <span class="
+        
+    terminal-mkdocs-side-nav-item terminal-mkdocs-side-nav-section-no-index">API Reference</span>
+        
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/">Overview</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/engines/">Engines</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/image/">Image</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/ocr/">OCR Models</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/dedup/">Deduplication</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/geometry/">Geometry</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../api/visualization/">Visualization</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+    </ul>
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#examples">Examples</a></li>
+        <li><a href="#basic_usagepy">basic_usage.py</a></li><li><a href="#multi_enginepy">multi_engine.py</a></li>
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h1 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">#</a></h1>
+<p>Working scripts in <a href="https://github.com/yz3440/panoocr/tree/main/examples">examples/</a>.</p>
+<h2 id="basic_usagepy">basic_usage.py<a class="headerlink" href="#basic_usagepy" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="ch">#!/usr/bin/env python3</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="sd">&quot;&quot;&quot;Basic usage example for PanoOCR.</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">This script demonstrates the simplest way to run OCR on a panorama image.</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="sd">Usage:</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="sd">    python basic_usage.py path/to/panorama.jpg</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="sd">Prerequisites:</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="sd">    pip install &quot;panoocr[macocr]&quot;  # For macOS</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="sd">    # or</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="sd">    pip install &quot;panoocr[easyocr]&quot;  # For cross-platform</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Usage: python basic_usage.py &lt;panorama_image&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Example:&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  python basic_usage.py panorama.jpg&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    <span class="n">image_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">image_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: File not found: </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    <span class="c1"># Import panoocr</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">panoocr</span><span class="w"> </span><span class="kn">import</span> <span class="n">PanoOCR</span><span class="p">,</span> <span class="n">PerspectivePreset</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    <span class="c1"># Try to import an OCR engine (prefer MacOCR on macOS, fall back to EasyOCR)</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    <span class="n">engine</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">panoocr.engines.macocr</span><span class="w"> </span><span class="kn">import</span> <span class="n">MacOCREngine</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using MacOCR engine (Apple Vision Framework)&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        <span class="n">engine</span> <span class="o">=</span> <span class="n">MacOCREngine</span><span class="p">()</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        <span class="k">pass</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    <span class="k">if</span> <span class="n">engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>            <span class="kn">from</span><span class="w"> </span><span class="nn">panoocr.engines.easyocr</span><span class="w"> </span><span class="kn">import</span> <span class="n">EasyOCREngine</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using EasyOCR engine&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>            <span class="n">engine</span> <span class="o">=</span> <span class="n">EasyOCREngine</span><span class="p">()</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>            <span class="k">pass</span>
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    <span class="k">if</span> <span class="n">engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: No OCR engine available.&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Install an OCR engine with:&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  pip install &#39;panoocr[macocr]&#39;  # For macOS&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  pip install &#39;panoocr[easyocr]&#39;  # For cross-platform&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    <span class="c1"># Create the PanoOCR pipeline</span>
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    <span class="n">pano</span> <span class="o">=</span> <span class="n">PanoOCR</span><span class="p">(</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>        <span class="n">engine</span><span class="p">,</span>
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>        <span class="n">perspectives</span><span class="o">=</span><span class="n">PerspectivePreset</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">,</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    <span class="p">)</span>
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    <span class="c1"># Run OCR</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Processing: </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">pano</span><span class="o">.</span><span class="n">recognize</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">image_path</span><span class="p">))</span>
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    <span class="c1"># Print results</span>
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> text regions:&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">results</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Position: yaw=</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">yaw</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°, pitch=</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">pitch</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Size: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">width</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">° x </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">height</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Confidence: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">confidence</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    <span class="c1"># Save results</span>
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    <span class="n">output_path</span> <span class="o">=</span> <span class="n">image_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.ocr.json&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    <span class="n">result</span><span class="o">.</span><span class="n">save_json</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">output_path</span><span class="p">))</span>
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Results saved to: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;View with: preview/index.html (drag and drop image + JSON)&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+<h2 id="multi_enginepy">multi_engine.py<a class="headerlink" href="#multi_enginepy" title="Permanent link">#</a></h2>
+<p>Compare results from different OCR engines on the same panorama.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="ch">#!/usr/bin/env python3</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="sd">&quot;&quot;&quot;Multi-engine comparison example for PanoOCR.</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="sd">This script compares OCR results from different engines on the same panorama.</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="sd">Usage:</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="sd">    python multi_engine.py path/to/panorama.jpg</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="sd">Prerequisites:</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="sd">    pip install &quot;panoocr[full]&quot;  # Install all engines</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_available_engines</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all available OCR engines.&quot;&quot;&quot;</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    <span class="n">engines</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">panoocr.engines.macocr</span><span class="w"> </span><span class="kn">import</span> <span class="n">MacOCREngine</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>        <span class="n">engines</span><span class="p">[</span><span class="s2">&quot;macocr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MacOCREngine</span><span class="p">()</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MacOCR not available (requires macOS)&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">panoocr.engines.easyocr</span><span class="w"> </span><span class="kn">import</span> <span class="n">EasyOCREngine</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>        <span class="n">engines</span><span class="p">[</span><span class="s2">&quot;easyocr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EasyOCREngine</span><span class="p">()</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;EasyOCR not available (pip install &#39;panoocr[easyocr]&#39;)&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">panoocr.engines.paddleocr</span><span class="w"> </span><span class="kn">import</span> <span class="n">PaddleOCREngine</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>        <span class="n">engines</span><span class="p">[</span><span class="s2">&quot;paddleocr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PaddleOCREngine</span><span class="p">()</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PaddleOCR not available (pip install &#39;panoocr[paddleocr]&#39;)&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">panoocr.engines.florence2</span><span class="w"> </span><span class="kn">import</span> <span class="n">Florence2OCREngine</span>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>        <span class="n">engines</span><span class="p">[</span><span class="s2">&quot;florence2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Florence2OCREngine</span><span class="p">()</span>
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Florence2 not available (pip install &#39;panoocr[florence2]&#39;)&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>    <span class="k">return</span> <span class="n">engines</span>
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Usage: python multi_engine.py &lt;panorama_image&gt;&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Example:&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  python multi_engine.py panorama.jpg&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>    <span class="n">image_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">image_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: File not found: </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">panoocr</span><span class="w"> </span><span class="kn">import</span> <span class="n">PanoOCR</span><span class="p">,</span> <span class="n">PerspectivePreset</span>
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>    <span class="c1"># Get available engines</span>
+<a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Detecting available OCR engines...&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a>    <span class="n">engines</span> <span class="o">=</span> <span class="n">get_available_engines</span><span class="p">()</span>
+<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>
+<a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">engines</span><span class="p">:</span>
+<a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error: No OCR engines available.&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Install engines with: pip install &#39;panoocr[full]&#39;&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a>
+<a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Available engines: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">engines</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a>
+<a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a>    <span class="c1"># Run OCR with each engine</span>
+<a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">engines</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[</span><span class="si">{</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+<a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a>
+<a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a>        <span class="n">pano</span> <span class="o">=</span> <span class="n">PanoOCR</span><span class="p">(</span>
+<a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a>            <span class="n">engine</span><span class="p">,</span>
+<a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a>            <span class="n">perspectives</span><span class="o">=</span><span class="n">PerspectivePreset</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">,</span>
+<a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a>        <span class="p">)</span>
+<a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a>
+<a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">pano</span><span class="o">.</span><span class="n">recognize</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">image_path</span><span class="p">),</span> <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a>
+<a id="__codelineno-1-91" name="__codelineno-1-91" href="#__codelineno-1-91"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> text regions&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-92" name="__codelineno-1-92" href="#__codelineno-1-92"></a>
+<a id="__codelineno-1-93" name="__codelineno-1-93" href="#__codelineno-1-93"></a>        <span class="c1"># Show first 5 results</span>
+<a id="__codelineno-1-94" name="__codelineno-1-94" href="#__codelineno-1-94"></a>        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">results</span><span class="p">[:</span><span class="mi">5</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-1-95" name="__codelineno-1-95" href="#__codelineno-1-95"></a>            <span class="n">text_preview</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">40</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">40</span> <span class="k">else</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<a id="__codelineno-1-96" name="__codelineno-1-96" href="#__codelineno-1-96"></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">text_preview</span><span class="si">}</span><span class="s2"> (conf: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">confidence</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-97" name="__codelineno-1-97" href="#__codelineno-1-97"></a>
+<a id="__codelineno-1-98" name="__codelineno-1-98" href="#__codelineno-1-98"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+<a id="__codelineno-1-99" name="__codelineno-1-99" href="#__codelineno-1-99"></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ... and </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">results</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="si">}</span><span class="s2"> more&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-100" name="__codelineno-1-100" href="#__codelineno-1-100"></a>
+<a id="__codelineno-1-101" name="__codelineno-1-101" href="#__codelineno-1-101"></a>        <span class="c1"># Save results</span>
+<a id="__codelineno-1-102" name="__codelineno-1-102" href="#__codelineno-1-102"></a>        <span class="n">output_path</span> <span class="o">=</span> <span class="n">image_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-103" name="__codelineno-1-103" href="#__codelineno-1-103"></a>        <span class="n">result</span><span class="o">.</span><span class="n">save_json</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">output_path</span><span class="p">))</span>
+<a id="__codelineno-1-104" name="__codelineno-1-104" href="#__codelineno-1-104"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-105" name="__codelineno-1-105" href="#__codelineno-1-105"></a>
+<a id="__codelineno-1-106" name="__codelineno-1-106" href="#__codelineno-1-106"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-1-107" name="__codelineno-1-107" href="#__codelineno-1-107"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Comparison complete!&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-108" name="__codelineno-1-108" href="#__codelineno-1-108"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">View results with: preview/index.html&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-109" name="__codelineno-1-109" href="#__codelineno-1-109"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Drag and drop the panorama image + any JSON results file&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-110" name="__codelineno-1-110" href="#__codelineno-1-110"></a>
+<a id="__codelineno-1-111" name="__codelineno-1-111" href="#__codelineno-1-111"></a>
+<a id="__codelineno-1-112" name="__codelineno-1-112" href="#__codelineno-1-112"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-1-113" name="__codelineno-1-113" href="#__codelineno-1-113"></a>    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>

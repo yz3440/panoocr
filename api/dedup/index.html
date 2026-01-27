@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.1, mkdocs-terminal-4.7.8">
+    
+    <meta name="description" content="OCR for equirectangular panorama images with automatic perspective projection and deduplication"> 
+    
+    <meta name="author" content="Yufeng Zhao"> 
+    
+    <link rel="canonical" href="https://yz3440.github.io/panoocr/api/dedup/"><link rel="icon" type="image/png" sizes="192x192" href="../../img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="../../img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="../../img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon-32x32.png" />
+
+
+    
+ 
+<title>Deduplication - PanoOCR</title>
+
+
+<link href="../../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../../css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../../css/normalize.css" rel="stylesheet">
+<link href="../../css/terminal.css" rel="stylesheet">
+<link href="../../css/theme.css" rel="stylesheet">
+<link href="../../css/theme.tile_grid.css" rel="stylesheet">
+<link href="../../css/theme.footer.css" rel="stylesheet">
+<!-- default color palette -->
+<link href="../../css/palettes/default.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+
+
+    
+    <link href="../../assets/_mkdocstrings.css" rel="stylesheet">  
+    
+    
+
+    
+    <!-- search css support -->
+<link href="../../css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = "../..",
+    shortcuts = "{}";
+</script>
+<script src="../../js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="../../js/bootstrap/bootstrap.min.js" defer></script>
+<script src="../../js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="../../search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="https://yz3440.github.io/panoocr/" class="no-style">PanoOCR</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../.." class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../../examples/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Examples</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                
+                    
+                    
+
+
+<li property="itemListElement" typeof="ListItem">
+    <a href="#" class="menu-item" data-toggle="modal" data-target="#mkdocs_search_modal" property="item" typeof="SearchAction">
+        <i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+    </a>
+    <meta property="position" content="2">
+</li>
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../..">Home</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../../examples/">Examples</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        <span class="
+        
+    terminal-mkdocs-side-nav-item--active terminal-mkdocs-side-nav-section-no-index">API Reference</span>
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../">Overview</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../engines/">Engines</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../image/">Image</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../ocr/">OCR Models</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        <span class="terminal-mkdocs-side-nav-item--active">Deduplication</span>
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../geometry/">Geometry</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../visualization/">Visualization</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+    </ul>
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#deduplication">Deduplication</a></li>
+        <li><a href="#algorithm">Algorithm</a></li><li><a href="#sphereocrduplicationdetectionengine">SphereOCRDuplicationDetectionEngine</a></li><li><a href="#panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SphereOCRDuplicationDetectionEngine</a></li><li><a href="#data-classes">Data Classes</a></li><li><a href="#panoocr.dedup.detection.RegionIntersection"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;RegionIntersection</a></li>
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h1 id="deduplication">Deduplication<a class="headerlink" href="#deduplication" title="Permanent link">#</a></h1>
+<p>Removes duplicate text detections when the same text appears in multiple perspective views.</p>
+<h2 id="algorithm">Algorithm<a class="headerlink" href="#algorithm" title="Permanent link">#</a></h2>
+<p>OCR results are deduplicated using spatial overlap and text similarity:</p>
+<ol>
+<li>Process perspectives sequentially (adjacent pairs)</li>
+<li>For each result pair, check both text similarity and region overlap</li>
+<li>If texts are similar (Levenshtein) or overlapping, and regions intersect sufficiently, mark as duplicate</li>
+<li>Keep the result with longer text, or higher confidence if equal length</li>
+</ol>
+<h2 id="sphereocrduplicationdetectionengine">SphereOCRDuplicationDetectionEngine<a class="headerlink" href="#sphereocrduplicationdetectionengine" title="Permanent link">#</a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">SphereOCRDuplicationDetectionEngine</span>
+
+
+<a href="#panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine" class="headerlink" title="Permanent link">#</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">SphereOCRDuplicationDetectionEngine</span><span class="p">(</span><span class="n">min_text_similarity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_MIN_TEXT_SIMILARITY</span><span class="p">,</span> <span class="n">min_intersection_ratio_for_similar_text</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_MIN_INTERSECTION_RATIO_FOR_SIMILAR_TEXT</span><span class="p">,</span> <span class="n">min_text_overlap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_MIN_TEXT_OVERLAP</span><span class="p">,</span> <span class="n">min_intersection_ratio_for_overlapping_text</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_MIN_INTERSECTION_RATIO_FOR_OVERLAPPING_TEXT</span><span class="p">,</span> <span class="n">min_intersection_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_MIN_INTERSECTION_RATIO</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Engine for detecting and removing duplicate OCR results.</p>
+<p>Duplicates are identified by comparing both spatial overlap and text
+similarity between results from overlapping perspective views.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.min_text_similarity">min_text_similarity</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum Levenshtein similarity threshold.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.min_intersection_ratio_for_similar_text">min_intersection_ratio_for_similar_text</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Required overlap for similar texts.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.min_text_overlap">min_text_overlap</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum overlap similarity threshold.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.min_intersection_ratio_for_overlapping_text">min_intersection_ratio_for_overlapping_text</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Required overlap for overlapping texts.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.min_intersection_ratio">min_intersection_ratio</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum intersection ratio to consider.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+        <p>Initialize the deduplication engine.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>min_text_similarity</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum Levenshtein normalized similarity (0-1).</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="panoocr.dedup.detection.DEFAULT_MIN_TEXT_SIMILARITY">DEFAULT_MIN_TEXT_SIMILARITY</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>min_intersection_ratio_for_similar_text</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum region overlap for
+text matches based on similarity.</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="panoocr.dedup.detection.DEFAULT_MIN_INTERSECTION_RATIO_FOR_SIMILAR_TEXT">DEFAULT_MIN_INTERSECTION_RATIO_FOR_SIMILAR_TEXT</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>min_text_overlap</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum overlap normalized similarity (0-1).</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="panoocr.dedup.detection.DEFAULT_MIN_TEXT_OVERLAP">DEFAULT_MIN_TEXT_OVERLAP</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>min_intersection_ratio_for_overlapping_text</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum region overlap
+for text matches based on overlap.</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="panoocr.dedup.detection.DEFAULT_MIN_INTERSECTION_RATIO_FOR_OVERLAPPING_TEXT">DEFAULT_MIN_INTERSECTION_RATIO_FOR_OVERLAPPING_TEXT</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>min_intersection_ratio</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Absolute minimum intersection ratio to
+consider any match.</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="panoocr.dedup.detection.DEFAULT_MIN_INTERSECTION_RATIO">DEFAULT_MIN_INTERSECTION_RATIO</span></code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+                  <details class="mkdocstrings-source">
+                    <summary>Source code in <code>src/panoocr/dedup/detection.py</code></summary>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-54">54</a></span>
+<span class="normal"><a href="#__codelineno-0-55">55</a></span>
+<span class="normal"><a href="#__codelineno-0-56">56</a></span>
+<span class="normal"><a href="#__codelineno-0-57">57</a></span>
+<span class="normal"><a href="#__codelineno-0-58">58</a></span>
+<span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span>
+<span class="normal"><a href="#__codelineno-0-72">72</a></span>
+<span class="normal"><a href="#__codelineno-0-73">73</a></span>
+<span class="normal"><a href="#__codelineno-0-74">74</a></span>
+<span class="normal"><a href="#__codelineno-0-75">75</a></span>
+<span class="normal"><a href="#__codelineno-0-76">76</a></span>
+<span class="normal"><a href="#__codelineno-0-77">77</a></span>
+<span class="normal"><a href="#__codelineno-0-78">78</a></span>
+<span class="normal"><a href="#__codelineno-0-79">79</a></span>
+<span class="normal"><a href="#__codelineno-0-80">80</a></span>
+<span class="normal"><a href="#__codelineno-0-81">81</a></span>
+<span class="normal"><a href="#__codelineno-0-82">82</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-54" name="__codelineno-0-54"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<a id="__codelineno-0-55" name="__codelineno-0-55"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-56" name="__codelineno-0-56"></a>    <span class="n">min_text_similarity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_MIN_TEXT_SIMILARITY</span><span class="p">,</span>
+<a id="__codelineno-0-57" name="__codelineno-0-57"></a>    <span class="n">min_intersection_ratio_for_similar_text</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_MIN_INTERSECTION_RATIO_FOR_SIMILAR_TEXT</span><span class="p">,</span>
+<a id="__codelineno-0-58" name="__codelineno-0-58"></a>    <span class="n">min_text_overlap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_MIN_TEXT_OVERLAP</span><span class="p">,</span>
+<a id="__codelineno-0-59" name="__codelineno-0-59"></a>    <span class="n">min_intersection_ratio_for_overlapping_text</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_MIN_INTERSECTION_RATIO_FOR_OVERLAPPING_TEXT</span><span class="p">,</span>
+<a id="__codelineno-0-60" name="__codelineno-0-60"></a>    <span class="n">min_intersection_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_MIN_INTERSECTION_RATIO</span><span class="p">,</span>
+<a id="__codelineno-0-61" name="__codelineno-0-61"></a><span class="p">):</span>
+<a id="__codelineno-0-62" name="__codelineno-0-62"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the deduplication engine.</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63"></a>
+<a id="__codelineno-0-64" name="__codelineno-0-64"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65"></a><span class="sd">        min_text_similarity: Minimum Levenshtein normalized similarity (0-1).</span>
+<a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="sd">        min_intersection_ratio_for_similar_text: Minimum region overlap for</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="sd">            text matches based on similarity.</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68"></a><span class="sd">        min_text_overlap: Minimum overlap normalized similarity (0-1).</span>
+<a id="__codelineno-0-69" name="__codelineno-0-69"></a><span class="sd">        min_intersection_ratio_for_overlapping_text: Minimum region overlap</span>
+<a id="__codelineno-0-70" name="__codelineno-0-70"></a><span class="sd">            for text matches based on overlap.</span>
+<a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="sd">        min_intersection_ratio: Absolute minimum intersection ratio to</span>
+<a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="sd">            consider any match.</span>
+<a id="__codelineno-0-73" name="__codelineno-0-73"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-74" name="__codelineno-0-74"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">min_text_similarity</span> <span class="o">=</span> <span class="n">min_text_similarity</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">min_intersection_ratio_for_similar_text</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76"></a>        <span class="n">min_intersection_ratio_for_similar_text</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77"></a>    <span class="p">)</span>
+<a id="__codelineno-0-78" name="__codelineno-0-78"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">min_text_overlap</span> <span class="o">=</span> <span class="n">min_text_overlap</span>
+<a id="__codelineno-0-79" name="__codelineno-0-79"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">min_intersection_ratio_for_overlapping_text</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-0-80" name="__codelineno-0-80"></a>        <span class="n">min_intersection_ratio_for_overlapping_text</span>
+<a id="__codelineno-0-81" name="__codelineno-0-81"></a>    <span class="p">)</span>
+<a id="__codelineno-0-82" name="__codelineno-0-82"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">min_intersection_ratio</span> <span class="o">=</span> <span class="n">min_intersection_ratio</span>
+</code></pre></div></td></tr></table></div>
+                  </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.check_duplication" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">check_duplication</span>
+
+
+<a href="#panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.check_duplication" class="headerlink" title="Permanent link">#</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">check_duplication</span><span class="p">(</span><span class="n">ocr_result_1</span><span class="p">:</span> <span class="n">SphereOCRResult</span><span class="p">,</span> <span class="n">ocr_result_2</span><span class="p">:</span> <span class="n">SphereOCRResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Check if two OCR results are duplicates.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>ocr_result_1</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            SphereOCRResult
+
+
+  
+      dataclass
+   (panoocr.ocr.models.SphereOCRResult)" href="../ocr/#panoocr.ocr.models.SphereOCRResult">SphereOCRResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First OCR result.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>ocr_result_2</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            SphereOCRResult
+
+
+  
+      dataclass
+   (panoocr.ocr.models.SphereOCRResult)" href="../ocr/#panoocr.ocr.models.SphereOCRResult">SphereOCRResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second OCR result.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>True if the results are considered duplicates.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/panoocr/dedup/detection.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-155">155</a></span>
+<span class="normal"><a href="#__codelineno-0-156">156</a></span>
+<span class="normal"><a href="#__codelineno-0-157">157</a></span>
+<span class="normal"><a href="#__codelineno-0-158">158</a></span>
+<span class="normal"><a href="#__codelineno-0-159">159</a></span>
+<span class="normal"><a href="#__codelineno-0-160">160</a></span>
+<span class="normal"><a href="#__codelineno-0-161">161</a></span>
+<span class="normal"><a href="#__codelineno-0-162">162</a></span>
+<span class="normal"><a href="#__codelineno-0-163">163</a></span>
+<span class="normal"><a href="#__codelineno-0-164">164</a></span>
+<span class="normal"><a href="#__codelineno-0-165">165</a></span>
+<span class="normal"><a href="#__codelineno-0-166">166</a></span>
+<span class="normal"><a href="#__codelineno-0-167">167</a></span>
+<span class="normal"><a href="#__codelineno-0-168">168</a></span>
+<span class="normal"><a href="#__codelineno-0-169">169</a></span>
+<span class="normal"><a href="#__codelineno-0-170">170</a></span>
+<span class="normal"><a href="#__codelineno-0-171">171</a></span>
+<span class="normal"><a href="#__codelineno-0-172">172</a></span>
+<span class="normal"><a href="#__codelineno-0-173">173</a></span>
+<span class="normal"><a href="#__codelineno-0-174">174</a></span>
+<span class="normal"><a href="#__codelineno-0-175">175</a></span>
+<span class="normal"><a href="#__codelineno-0-176">176</a></span>
+<span class="normal"><a href="#__codelineno-0-177">177</a></span>
+<span class="normal"><a href="#__codelineno-0-178">178</a></span>
+<span class="normal"><a href="#__codelineno-0-179">179</a></span>
+<span class="normal"><a href="#__codelineno-0-180">180</a></span>
+<span class="normal"><a href="#__codelineno-0-181">181</a></span>
+<span class="normal"><a href="#__codelineno-0-182">182</a></span>
+<span class="normal"><a href="#__codelineno-0-183">183</a></span>
+<span class="normal"><a href="#__codelineno-0-184">184</a></span>
+<span class="normal"><a href="#__codelineno-0-185">185</a></span>
+<span class="normal"><a href="#__codelineno-0-186">186</a></span>
+<span class="normal"><a href="#__codelineno-0-187">187</a></span>
+<span class="normal"><a href="#__codelineno-0-188">188</a></span>
+<span class="normal"><a href="#__codelineno-0-189">189</a></span>
+<span class="normal"><a href="#__codelineno-0-190">190</a></span>
+<span class="normal"><a href="#__codelineno-0-191">191</a></span>
+<span class="normal"><a href="#__codelineno-0-192">192</a></span>
+<span class="normal"><a href="#__codelineno-0-193">193</a></span>
+<span class="normal"><a href="#__codelineno-0-194">194</a></span>
+<span class="normal"><a href="#__codelineno-0-195">195</a></span>
+<span class="normal"><a href="#__codelineno-0-196">196</a></span>
+<span class="normal"><a href="#__codelineno-0-197">197</a></span>
+<span class="normal"><a href="#__codelineno-0-198">198</a></span>
+<span class="normal"><a href="#__codelineno-0-199">199</a></span>
+<span class="normal"><a href="#__codelineno-0-200">200</a></span>
+<span class="normal"><a href="#__codelineno-0-201">201</a></span>
+<span class="normal"><a href="#__codelineno-0-202">202</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-155" name="__codelineno-0-155"></a><span class="k">def</span><span class="w"> </span><span class="nf">check_duplication</span><span class="p">(</span>
+<a id="__codelineno-0-156" name="__codelineno-0-156"></a>    <span class="bp">self</span><span class="p">,</span> <span class="n">ocr_result_1</span><span class="p">:</span> <span class="n">SphereOCRResult</span><span class="p">,</span> <span class="n">ocr_result_2</span><span class="p">:</span> <span class="n">SphereOCRResult</span>
+<a id="__codelineno-0-157" name="__codelineno-0-157"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-0-158" name="__codelineno-0-158"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if two OCR results are duplicates.</span>
+<a id="__codelineno-0-159" name="__codelineno-0-159"></a>
+<a id="__codelineno-0-160" name="__codelineno-0-160"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-161" name="__codelineno-0-161"></a><span class="sd">        ocr_result_1: First OCR result.</span>
+<a id="__codelineno-0-162" name="__codelineno-0-162"></a><span class="sd">        ocr_result_2: Second OCR result.</span>
+<a id="__codelineno-0-163" name="__codelineno-0-163"></a>
+<a id="__codelineno-0-164" name="__codelineno-0-164"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-165" name="__codelineno-0-165"></a><span class="sd">        True if the results are considered duplicates.</span>
+<a id="__codelineno-0-166" name="__codelineno-0-166"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-167" name="__codelineno-0-167"></a>    <span class="n">text_similarity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_texts_similarity</span><span class="p">(</span>
+<a id="__codelineno-0-168" name="__codelineno-0-168"></a>        <span class="n">ocr_result_1</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">ocr_result_2</span><span class="o">.</span><span class="n">text</span>
+<a id="__codelineno-0-169" name="__codelineno-0-169"></a>    <span class="p">)</span>
+<a id="__codelineno-0-170" name="__codelineno-0-170"></a>    <span class="n">text_overlap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_texts_overlap</span><span class="p">(</span><span class="n">ocr_result_1</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">ocr_result_2</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<a id="__codelineno-0-171" name="__codelineno-0-171"></a>
+<a id="__codelineno-0-172" name="__codelineno-0-172"></a>    <span class="c1"># If texts are neither similar nor overlapping, not duplicates</span>
+<a id="__codelineno-0-173" name="__codelineno-0-173"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">text_similarity</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_text_similarity</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+<a id="__codelineno-0-174" name="__codelineno-0-174"></a>        <span class="n">text_overlap</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_text_overlap</span>
+<a id="__codelineno-0-175" name="__codelineno-0-175"></a>    <span class="p">):</span>
+<a id="__codelineno-0-176" name="__codelineno-0-176"></a>        <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-177" name="__codelineno-0-177"></a>
+<a id="__codelineno-0-178" name="__codelineno-0-178"></a>    <span class="c1"># Check spatial intersection</span>
+<a id="__codelineno-0-179" name="__codelineno-0-179"></a>    <span class="n">intersection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intersect_ocr_results</span><span class="p">(</span><span class="n">ocr_result_1</span><span class="p">,</span> <span class="n">ocr_result_2</span><span class="p">)</span>
+<a id="__codelineno-0-180" name="__codelineno-0-180"></a>    <span class="k">if</span> <span class="n">intersection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-181" name="__codelineno-0-181"></a>        <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-182" name="__codelineno-0-182"></a>
+<a id="__codelineno-0-183" name="__codelineno-0-183"></a>    <span class="k">if</span> <span class="n">intersection</span><span class="o">.</span><span class="n">intersection_ratio</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_intersection_ratio</span><span class="p">:</span>
+<a id="__codelineno-0-184" name="__codelineno-0-184"></a>        <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-185" name="__codelineno-0-185"></a>
+<a id="__codelineno-0-186" name="__codelineno-0-186"></a>    <span class="c1"># Check if texts overlap and regions overlap sufficiently</span>
+<a id="__codelineno-0-187" name="__codelineno-0-187"></a>    <span class="k">if</span> <span class="p">(</span>
+<a id="__codelineno-0-188" name="__codelineno-0-188"></a>        <span class="n">text_overlap</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_text_overlap</span>
+<a id="__codelineno-0-189" name="__codelineno-0-189"></a>        <span class="ow">and</span> <span class="n">intersection</span><span class="o">.</span><span class="n">intersection_ratio</span>
+<a id="__codelineno-0-190" name="__codelineno-0-190"></a>        <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_intersection_ratio_for_overlapping_text</span>
+<a id="__codelineno-0-191" name="__codelineno-0-191"></a>    <span class="p">):</span>
+<a id="__codelineno-0-192" name="__codelineno-0-192"></a>        <span class="k">return</span> <span class="kc">True</span>
+<a id="__codelineno-0-193" name="__codelineno-0-193"></a>
+<a id="__codelineno-0-194" name="__codelineno-0-194"></a>    <span class="c1"># Check if texts are similar and regions overlap sufficiently</span>
+<a id="__codelineno-0-195" name="__codelineno-0-195"></a>    <span class="k">if</span> <span class="p">(</span>
+<a id="__codelineno-0-196" name="__codelineno-0-196"></a>        <span class="n">text_similarity</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_text_similarity</span>
+<a id="__codelineno-0-197" name="__codelineno-0-197"></a>        <span class="ow">and</span> <span class="n">intersection</span><span class="o">.</span><span class="n">intersection_ratio</span>
+<a id="__codelineno-0-198" name="__codelineno-0-198"></a>        <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_intersection_ratio_for_similar_text</span>
+<a id="__codelineno-0-199" name="__codelineno-0-199"></a>    <span class="p">):</span>
+<a id="__codelineno-0-200" name="__codelineno-0-200"></a>        <span class="k">return</span> <span class="kc">True</span>
+<a id="__codelineno-0-201" name="__codelineno-0-201"></a>
+<a id="__codelineno-0-202" name="__codelineno-0-202"></a>    <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.remove_duplication_for_two_lists" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">remove_duplication_for_two_lists</span>
+
+
+<a href="#panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.remove_duplication_for_two_lists" class="headerlink" title="Permanent link">#</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">remove_duplication_for_two_lists</span><span class="p">(</span><span class="n">ocr_results_0</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">],</span> <span class="n">ocr_results_1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">]]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Remove duplicates between two lists of OCR results.</p>
+<p>When duplicates are found, keeps the result with longer text,
+or higher confidence if texts are equal length.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>ocr_results_0</code>
+            </td>
+            <td>
+                  <code><span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="            SphereOCRResult
+
+
+  
+      dataclass
+   (panoocr.ocr.models.SphereOCRResult)" href="../ocr/#panoocr.ocr.models.SphereOCRResult">SphereOCRResult</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First list of OCR results (modified in place).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>ocr_results_1</code>
+            </td>
+            <td>
+                  <code><span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="            SphereOCRResult
+
+
+  
+      dataclass
+   (panoocr.ocr.models.SphereOCRResult)" href="../ocr/#panoocr.ocr.models.SphereOCRResult">SphereOCRResult</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second list of OCR results (modified in place).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Tuple">Tuple</span>[<span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="            SphereOCRResult
+
+
+  
+      dataclass
+   (panoocr.ocr.models.SphereOCRResult)" href="../ocr/#panoocr.ocr.models.SphereOCRResult">SphereOCRResult</a>], <span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="            SphereOCRResult
+
+
+  
+      dataclass
+   (panoocr.ocr.models.SphereOCRResult)" href="../ocr/#panoocr.ocr.models.SphereOCRResult">SphereOCRResult</a>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Tuple of the two lists with duplicates removed.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/panoocr/dedup/detection.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-204">204</a></span>
+<span class="normal"><a href="#__codelineno-0-205">205</a></span>
+<span class="normal"><a href="#__codelineno-0-206">206</a></span>
+<span class="normal"><a href="#__codelineno-0-207">207</a></span>
+<span class="normal"><a href="#__codelineno-0-208">208</a></span>
+<span class="normal"><a href="#__codelineno-0-209">209</a></span>
+<span class="normal"><a href="#__codelineno-0-210">210</a></span>
+<span class="normal"><a href="#__codelineno-0-211">211</a></span>
+<span class="normal"><a href="#__codelineno-0-212">212</a></span>
+<span class="normal"><a href="#__codelineno-0-213">213</a></span>
+<span class="normal"><a href="#__codelineno-0-214">214</a></span>
+<span class="normal"><a href="#__codelineno-0-215">215</a></span>
+<span class="normal"><a href="#__codelineno-0-216">216</a></span>
+<span class="normal"><a href="#__codelineno-0-217">217</a></span>
+<span class="normal"><a href="#__codelineno-0-218">218</a></span>
+<span class="normal"><a href="#__codelineno-0-219">219</a></span>
+<span class="normal"><a href="#__codelineno-0-220">220</a></span>
+<span class="normal"><a href="#__codelineno-0-221">221</a></span>
+<span class="normal"><a href="#__codelineno-0-222">222</a></span>
+<span class="normal"><a href="#__codelineno-0-223">223</a></span>
+<span class="normal"><a href="#__codelineno-0-224">224</a></span>
+<span class="normal"><a href="#__codelineno-0-225">225</a></span>
+<span class="normal"><a href="#__codelineno-0-226">226</a></span>
+<span class="normal"><a href="#__codelineno-0-227">227</a></span>
+<span class="normal"><a href="#__codelineno-0-228">228</a></span>
+<span class="normal"><a href="#__codelineno-0-229">229</a></span>
+<span class="normal"><a href="#__codelineno-0-230">230</a></span>
+<span class="normal"><a href="#__codelineno-0-231">231</a></span>
+<span class="normal"><a href="#__codelineno-0-232">232</a></span>
+<span class="normal"><a href="#__codelineno-0-233">233</a></span>
+<span class="normal"><a href="#__codelineno-0-234">234</a></span>
+<span class="normal"><a href="#__codelineno-0-235">235</a></span>
+<span class="normal"><a href="#__codelineno-0-236">236</a></span>
+<span class="normal"><a href="#__codelineno-0-237">237</a></span>
+<span class="normal"><a href="#__codelineno-0-238">238</a></span>
+<span class="normal"><a href="#__codelineno-0-239">239</a></span>
+<span class="normal"><a href="#__codelineno-0-240">240</a></span>
+<span class="normal"><a href="#__codelineno-0-241">241</a></span>
+<span class="normal"><a href="#__codelineno-0-242">242</a></span>
+<span class="normal"><a href="#__codelineno-0-243">243</a></span>
+<span class="normal"><a href="#__codelineno-0-244">244</a></span>
+<span class="normal"><a href="#__codelineno-0-245">245</a></span>
+<span class="normal"><a href="#__codelineno-0-246">246</a></span>
+<span class="normal"><a href="#__codelineno-0-247">247</a></span>
+<span class="normal"><a href="#__codelineno-0-248">248</a></span>
+<span class="normal"><a href="#__codelineno-0-249">249</a></span>
+<span class="normal"><a href="#__codelineno-0-250">250</a></span>
+<span class="normal"><a href="#__codelineno-0-251">251</a></span>
+<span class="normal"><a href="#__codelineno-0-252">252</a></span>
+<span class="normal"><a href="#__codelineno-0-253">253</a></span>
+<span class="normal"><a href="#__codelineno-0-254">254</a></span>
+<span class="normal"><a href="#__codelineno-0-255">255</a></span>
+<span class="normal"><a href="#__codelineno-0-256">256</a></span>
+<span class="normal"><a href="#__codelineno-0-257">257</a></span>
+<span class="normal"><a href="#__codelineno-0-258">258</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-204" name="__codelineno-0-204"></a><span class="k">def</span><span class="w"> </span><span class="nf">remove_duplication_for_two_lists</span><span class="p">(</span>
+<a id="__codelineno-0-205" name="__codelineno-0-205"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-206" name="__codelineno-0-206"></a>    <span class="n">ocr_results_0</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">],</span>
+<a id="__codelineno-0-207" name="__codelineno-0-207"></a>    <span class="n">ocr_results_1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">],</span>
+<a id="__codelineno-0-208" name="__codelineno-0-208"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">]]:</span>
+<a id="__codelineno-0-209" name="__codelineno-0-209"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove duplicates between two lists of OCR results.</span>
+<a id="__codelineno-0-210" name="__codelineno-0-210"></a>
+<a id="__codelineno-0-211" name="__codelineno-0-211"></a><span class="sd">    When duplicates are found, keeps the result with longer text,</span>
+<a id="__codelineno-0-212" name="__codelineno-0-212"></a><span class="sd">    or higher confidence if texts are equal length.</span>
+<a id="__codelineno-0-213" name="__codelineno-0-213"></a>
+<a id="__codelineno-0-214" name="__codelineno-0-214"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-215" name="__codelineno-0-215"></a><span class="sd">        ocr_results_0: First list of OCR results (modified in place).</span>
+<a id="__codelineno-0-216" name="__codelineno-0-216"></a><span class="sd">        ocr_results_1: Second list of OCR results (modified in place).</span>
+<a id="__codelineno-0-217" name="__codelineno-0-217"></a>
+<a id="__codelineno-0-218" name="__codelineno-0-218"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-219" name="__codelineno-0-219"></a><span class="sd">        Tuple of the two lists with duplicates removed.</span>
+<a id="__codelineno-0-220" name="__codelineno-0-220"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-221" name="__codelineno-0-221"></a>    <span class="c1"># Find all duplicate pairs</span>
+<a id="__codelineno-0-222" name="__codelineno-0-222"></a>    <span class="n">duplications</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-223" name="__codelineno-0-223"></a>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ocr_result_0</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ocr_results_0</span><span class="p">):</span>
+<a id="__codelineno-0-224" name="__codelineno-0-224"></a>        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">ocr_result_1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ocr_results_1</span><span class="p">):</span>
+<a id="__codelineno-0-225" name="__codelineno-0-225"></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_duplication</span><span class="p">(</span><span class="n">ocr_result_0</span><span class="p">,</span> <span class="n">ocr_result_1</span><span class="p">):</span>
+<a id="__codelineno-0-226" name="__codelineno-0-226"></a>                <span class="n">duplications</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+<a id="__codelineno-0-227" name="__codelineno-0-227"></a>
+<a id="__codelineno-0-228" name="__codelineno-0-228"></a>    <span class="c1"># Determine which to remove from each list</span>
+<a id="__codelineno-0-229" name="__codelineno-0-229"></a>    <span class="n">indices_to_remove_from_0</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-230" name="__codelineno-0-230"></a>    <span class="n">indices_to_remove_from_1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-231" name="__codelineno-0-231"></a>
+<a id="__codelineno-0-232" name="__codelineno-0-232"></a>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">duplications</span><span class="p">:</span>
+<a id="__codelineno-0-233" name="__codelineno-0-233"></a>        <span class="n">candidate_0</span> <span class="o">=</span> <span class="n">ocr_results_0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<a id="__codelineno-0-234" name="__codelineno-0-234"></a>        <span class="n">candidate_1</span> <span class="o">=</span> <span class="n">ocr_results_1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+<a id="__codelineno-0-235" name="__codelineno-0-235"></a>
+<a id="__codelineno-0-236" name="__codelineno-0-236"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate_0</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate_1</span><span class="o">.</span><span class="n">text</span><span class="p">):</span>
+<a id="__codelineno-0-237" name="__codelineno-0-237"></a>            <span class="c1"># Equal length: prefer higher confidence</span>
+<a id="__codelineno-0-238" name="__codelineno-0-238"></a>            <span class="k">if</span> <span class="n">candidate_0</span><span class="o">.</span><span class="n">confidence</span> <span class="o">&lt;</span> <span class="n">candidate_1</span><span class="o">.</span><span class="n">confidence</span><span class="p">:</span>
+<a id="__codelineno-0-239" name="__codelineno-0-239"></a>                <span class="n">indices_to_remove_from_0</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a id="__codelineno-0-240" name="__codelineno-0-240"></a>            <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-241" name="__codelineno-0-241"></a>                <span class="n">indices_to_remove_from_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+<a id="__codelineno-0-242" name="__codelineno-0-242"></a>        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate_0</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate_1</span><span class="o">.</span><span class="n">text</span><span class="p">):</span>
+<a id="__codelineno-0-243" name="__codelineno-0-243"></a>            <span class="c1"># Prefer longer text</span>
+<a id="__codelineno-0-244" name="__codelineno-0-244"></a>            <span class="n">indices_to_remove_from_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+<a id="__codelineno-0-245" name="__codelineno-0-245"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-246" name="__codelineno-0-246"></a>            <span class="n">indices_to_remove_from_0</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a id="__codelineno-0-247" name="__codelineno-0-247"></a>
+<a id="__codelineno-0-248" name="__codelineno-0-248"></a>    <span class="c1"># Remove duplicates (in reverse order to preserve indices)</span>
+<a id="__codelineno-0-249" name="__codelineno-0-249"></a>    <span class="n">indices_to_remove_from_0</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">indices_to_remove_from_0</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-0-250" name="__codelineno-0-250"></a>    <span class="n">indices_to_remove_from_1</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">indices_to_remove_from_1</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-0-251" name="__codelineno-0-251"></a>
+<a id="__codelineno-0-252" name="__codelineno-0-252"></a>    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices_to_remove_from_0</span><span class="p">:</span>
+<a id="__codelineno-0-253" name="__codelineno-0-253"></a>        <span class="n">ocr_results_0</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+<a id="__codelineno-0-254" name="__codelineno-0-254"></a>
+<a id="__codelineno-0-255" name="__codelineno-0-255"></a>    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices_to_remove_from_1</span><span class="p">:</span>
+<a id="__codelineno-0-256" name="__codelineno-0-256"></a>        <span class="n">ocr_results_1</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+<a id="__codelineno-0-257" name="__codelineno-0-257"></a>
+<a id="__codelineno-0-258" name="__codelineno-0-258"></a>    <span class="k">return</span> <span class="n">ocr_results_0</span><span class="p">,</span> <span class="n">ocr_results_1</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="data-classes">Data Classes<a class="headerlink" href="#data-classes" title="Permanent link">#</a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="panoocr.dedup.detection.RegionIntersection" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">RegionIntersection</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#panoocr.dedup.detection.RegionIntersection" class="headerlink" title="Permanent link">#</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">RegionIntersection</span><span class="p">(</span><span class="n">region_1_area</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">region_2_area</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">intersection_area</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">intersection_ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Result of intersecting two regions.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.dedup.detection.RegionIntersection.region_1_area">region_1_area</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Area of the first region.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.dedup.detection.RegionIntersection.region_2_area">region_2_area</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Area of the second region.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.dedup.detection.RegionIntersection.intersection_area">intersection_area</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Area of the intersection.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.dedup.detection.RegionIntersection.intersection_ratio">intersection_ratio</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Intersection area divided by minimum region area.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>

@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.1, mkdocs-terminal-4.7.8">
+    
+    <meta name="description" content="OCR for equirectangular panorama images with automatic perspective projection and deduplication"> 
+    
+    <meta name="author" content="Yufeng Zhao"> 
+    
+    <link rel="canonical" href="https://yz3440.github.io/panoocr/api/"><link rel="icon" type="image/png" sizes="192x192" href="../img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="../img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="../img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png" />
+
+
+    
+ 
+<title>Overview - PanoOCR</title>
+
+
+<link href="../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../css/normalize.css" rel="stylesheet">
+<link href="../css/terminal.css" rel="stylesheet">
+<link href="../css/theme.css" rel="stylesheet">
+<link href="../css/theme.tile_grid.css" rel="stylesheet">
+<link href="../css/theme.footer.css" rel="stylesheet">
+<!-- default color palette -->
+<link href="../css/palettes/default.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+
+
+    
+    <link href="../assets/_mkdocstrings.css" rel="stylesheet">  
+    
+    
+
+    
+    <!-- search css support -->
+<link href="../css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = "..",
+    shortcuts = "{}";
+</script>
+<script src="../js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="../js/bootstrap/bootstrap.min.js" defer></script>
+<script src="../js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="../search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="https://yz3440.github.io/panoocr/" class="no-style">PanoOCR</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href=".." class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../examples/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Examples</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                
+                    
+                    
+
+
+<li property="itemListElement" typeof="ListItem">
+    <a href="#" class="menu-item" data-toggle="modal" data-target="#mkdocs_search_modal" property="item" typeof="SearchAction">
+        <i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+    </a>
+    <meta property="position" content="2">
+</li>
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="..">Home</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../examples/">Examples</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        <span class="
+        
+    terminal-mkdocs-side-nav-item--active terminal-mkdocs-side-nav-section-no-index">API Reference</span>
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        <span class="terminal-mkdocs-side-nav-item--active">Overview</span>
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="engines/">Engines</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="image/">Image</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="ocr/">OCR Models</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="dedup/">Deduplication</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="geometry/">Geometry</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="visualization/">Visualization</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+    </ul>
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#api-reference">API Reference</a></li>
+        <li><a href="#client-api">Client API</a></li><li><a href="#panoocr.api.client.PanoOCR"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;PanoOCR</a></li><li><a href="#panoocr.api.models.OCRResult"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;OCRResult</a></li><li><a href="#panoocr.api.models.PerspectivePreset"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;PerspectivePreset</a></li><li><a href="#panoocr.api.models.OCROptions"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;OCROptions</a></li><li><a href="#panoocr.api.models.DedupOptions"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;DedupOptions</a></li><li><a href="#module-structure">Module Structure</a></li><li><a href="#submodules">Submodules</a></li>
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">#</a></h1>
+<h2 id="client-api">Client API<a class="headerlink" href="#client-api" title="Permanent link">#</a></h2>
+<p>The <code>PanoOCR</code> class is the main entry point.</p>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="panoocr.api.client.PanoOCR" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">PanoOCR</span>
+
+
+<a href="#panoocr.api.client.PanoOCR" class="headerlink" title="Permanent link">#</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">PanoOCR</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">OCREngine</span><span class="p">,</span> <span class="n">perspectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">PerspectivePreset</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">PerspectiveMetadata</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dedup_options</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DedupOptions</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Pipeline-first API for panorama OCR.</p>
+<p>This class provides a high-level interface for running OCR on
+equirectangular panorama images with automatic perspective projection
+and deduplication.</p>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <blockquote>
+<blockquote>
+<blockquote>
+<p>from panoocr import PanoOCR
+from panoocr.engines.macocr import MacOCREngine</p>
+<p>engine = MacOCREngine()
+pano = PanoOCR(engine)
+result = pano.recognize("panorama.jpg")
+result.save_json("results.json")</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</details>
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.client.PanoOCR.engine">engine</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The OCR engine to use for text recognition.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.client.PanoOCR.perspectives">perspectives</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of perspective configurations.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.client.PanoOCR.dedup_options">dedup_options</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Deduplication options.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+        <p>Initialize PanoOCR.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>engine</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            OCREngine (panoocr.api.models.OCREngine)" href="engines/#panoocr.api.models.OCREngine">OCREngine</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>OCR engine implementing the OCREngine protocol.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>perspectives</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="            PerspectivePreset (panoocr.api.models.PerspectivePreset)" href="#panoocr.api.models.PerspectivePreset">PerspectivePreset</a>, <span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="            PerspectiveMetadata
+
+
+  
+      dataclass
+   (panoocr.image.models.PerspectiveMetadata)" href="image/#panoocr.image.models.PerspectiveMetadata">PerspectiveMetadata</a>]]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Perspective configuration - either a preset name or
+custom list of PerspectiveMetadata. Defaults to DEFAULT.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dedup_options</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="            DedupOptions
+
+
+  
+      dataclass
+   (panoocr.api.models.DedupOptions)" href="#panoocr.api.models.DedupOptions">DedupOptions</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Deduplication options. Uses defaults if not provided.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+                  <details class="mkdocstrings-source">
+                    <summary>Source code in <code>src/panoocr/api/client.py</code></summary>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span>
+<span class="normal"><a href="#__codelineno-0-72">72</a></span>
+<span class="normal"><a href="#__codelineno-0-73">73</a></span>
+<span class="normal"><a href="#__codelineno-0-74">74</a></span>
+<span class="normal"><a href="#__codelineno-0-75">75</a></span>
+<span class="normal"><a href="#__codelineno-0-76">76</a></span>
+<span class="normal"><a href="#__codelineno-0-77">77</a></span>
+<span class="normal"><a href="#__codelineno-0-78">78</a></span>
+<span class="normal"><a href="#__codelineno-0-79">79</a></span>
+<span class="normal"><a href="#__codelineno-0-80">80</a></span>
+<span class="normal"><a href="#__codelineno-0-81">81</a></span>
+<span class="normal"><a href="#__codelineno-0-82">82</a></span>
+<span class="normal"><a href="#__codelineno-0-83">83</a></span>
+<span class="normal"><a href="#__codelineno-0-84">84</a></span>
+<span class="normal"><a href="#__codelineno-0-85">85</a></span>
+<span class="normal"><a href="#__codelineno-0-86">86</a></span>
+<span class="normal"><a href="#__codelineno-0-87">87</a></span>
+<span class="normal"><a href="#__codelineno-0-88">88</a></span>
+<span class="normal"><a href="#__codelineno-0-89">89</a></span>
+<span class="normal"><a href="#__codelineno-0-90">90</a></span>
+<span class="normal"><a href="#__codelineno-0-91">91</a></span>
+<span class="normal"><a href="#__codelineno-0-92">92</a></span>
+<span class="normal"><a href="#__codelineno-0-93">93</a></span>
+<span class="normal"><a href="#__codelineno-0-94">94</a></span>
+<span class="normal"><a href="#__codelineno-0-95">95</a></span>
+<span class="normal"><a href="#__codelineno-0-96">96</a></span>
+<span class="normal"><a href="#__codelineno-0-97">97</a></span>
+<span class="normal"><a href="#__codelineno-0-98">98</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-63" name="__codelineno-0-63"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<a id="__codelineno-0-64" name="__codelineno-0-64"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65"></a>    <span class="n">engine</span><span class="p">:</span> <span class="n">OCREngine</span><span class="p">,</span>
+<a id="__codelineno-0-66" name="__codelineno-0-66"></a>    <span class="n">perspectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">PerspectivePreset</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">PerspectiveMetadata</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67"></a>    <span class="n">dedup_options</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DedupOptions</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68"></a><span class="p">):</span>
+<a id="__codelineno-0-69" name="__codelineno-0-69"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize PanoOCR.</span>
+<a id="__codelineno-0-70" name="__codelineno-0-70"></a>
+<a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="sd">        engine: OCR engine implementing the OCREngine protocol.</span>
+<a id="__codelineno-0-73" name="__codelineno-0-73"></a><span class="sd">        perspectives: Perspective configuration - either a preset name or</span>
+<a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="sd">            custom list of PerspectiveMetadata. Defaults to DEFAULT.</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75"></a><span class="sd">        dedup_options: Deduplication options. Uses defaults if not provided.</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine</span>
+<a id="__codelineno-0-78" name="__codelineno-0-78"></a>
+<a id="__codelineno-0-79" name="__codelineno-0-79"></a>    <span class="c1"># Set up perspectives</span>
+<a id="__codelineno-0-80" name="__codelineno-0-80"></a>    <span class="k">if</span> <span class="n">perspectives</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-81" name="__codelineno-0-81"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">perspectives</span> <span class="o">=</span> <span class="n">DEFAULT_IMAGE_PERSPECTIVES</span>
+<a id="__codelineno-0-82" name="__codelineno-0-82"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_preset_name</span> <span class="o">=</span> <span class="n">PerspectivePreset</span><span class="o">.</span><span class="n">DEFAULT</span><span class="o">.</span><span class="n">value</span>
+<a id="__codelineno-0-83" name="__codelineno-0-83"></a>    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">perspectives</span><span class="p">,</span> <span class="n">PerspectivePreset</span><span class="p">):</span>
+<a id="__codelineno-0-84" name="__codelineno-0-84"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">perspectives</span> <span class="o">=</span> <span class="n">_get_perspectives_for_preset</span><span class="p">(</span><span class="n">perspectives</span><span class="p">)</span>
+<a id="__codelineno-0-85" name="__codelineno-0-85"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_preset_name</span> <span class="o">=</span> <span class="n">perspectives</span><span class="o">.</span><span class="n">value</span>
+<a id="__codelineno-0-86" name="__codelineno-0-86"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-87" name="__codelineno-0-87"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">perspectives</span> <span class="o">=</span> <span class="n">perspectives</span>
+<a id="__codelineno-0-88" name="__codelineno-0-88"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_preset_name</span> <span class="o">=</span> <span class="s2">&quot;custom&quot;</span>
+<a id="__codelineno-0-89" name="__codelineno-0-89"></a>
+<a id="__codelineno-0-90" name="__codelineno-0-90"></a>    <span class="c1"># Set up deduplication</span>
+<a id="__codelineno-0-91" name="__codelineno-0-91"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">dedup_options</span> <span class="o">=</span> <span class="n">dedup_options</span> <span class="ow">or</span> <span class="n">DedupOptions</span><span class="p">()</span>
+<a id="__codelineno-0-92" name="__codelineno-0-92"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_dedup_engine</span> <span class="o">=</span> <span class="n">SphereOCRDuplicationDetectionEngine</span><span class="p">(</span>
+<a id="__codelineno-0-93" name="__codelineno-0-93"></a>        <span class="n">min_text_similarity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dedup_options</span><span class="o">.</span><span class="n">min_text_similarity</span><span class="p">,</span>
+<a id="__codelineno-0-94" name="__codelineno-0-94"></a>        <span class="n">min_intersection_ratio_for_similar_text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dedup_options</span><span class="o">.</span><span class="n">min_intersection_ratio_for_similar_text</span><span class="p">,</span>
+<a id="__codelineno-0-95" name="__codelineno-0-95"></a>        <span class="n">min_text_overlap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dedup_options</span><span class="o">.</span><span class="n">min_text_overlap</span><span class="p">,</span>
+<a id="__codelineno-0-96" name="__codelineno-0-96"></a>        <span class="n">min_intersection_ratio_for_overlapping_text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dedup_options</span><span class="o">.</span><span class="n">min_intersection_ratio_for_overlapping_text</span><span class="p">,</span>
+<a id="__codelineno-0-97" name="__codelineno-0-97"></a>        <span class="n">min_intersection_ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dedup_options</span><span class="o">.</span><span class="n">min_intersection_ratio</span><span class="p">,</span>
+<a id="__codelineno-0-98" name="__codelineno-0-98"></a>    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+                  </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="panoocr.api.client.PanoOCR.recognize" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">recognize</span>
+
+
+<a href="#panoocr.api.client.PanoOCR.recognize" class="headerlink" title="Permanent link">#</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">recognize</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Image</span><span class="p">],</span> <span class="n">panorama_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show_progress</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OCRResult</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Run OCR on a panorama image.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>image</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="PIL.Image.Image">Image</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to panorama image or PIL Image.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>panorama_id</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional identifier for the panorama.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>show_progress</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to show a progress bar.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            OCRResult
+
+
+  
+      dataclass
+   (panoocr.api.models.OCRResult)" href="#panoocr.api.models.OCRResult">OCRResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>OCRResult containing deduplicated sphere OCR results.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/panoocr/api/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-100">100</a></span>
+<span class="normal"><a href="#__codelineno-0-101">101</a></span>
+<span class="normal"><a href="#__codelineno-0-102">102</a></span>
+<span class="normal"><a href="#__codelineno-0-103">103</a></span>
+<span class="normal"><a href="#__codelineno-0-104">104</a></span>
+<span class="normal"><a href="#__codelineno-0-105">105</a></span>
+<span class="normal"><a href="#__codelineno-0-106">106</a></span>
+<span class="normal"><a href="#__codelineno-0-107">107</a></span>
+<span class="normal"><a href="#__codelineno-0-108">108</a></span>
+<span class="normal"><a href="#__codelineno-0-109">109</a></span>
+<span class="normal"><a href="#__codelineno-0-110">110</a></span>
+<span class="normal"><a href="#__codelineno-0-111">111</a></span>
+<span class="normal"><a href="#__codelineno-0-112">112</a></span>
+<span class="normal"><a href="#__codelineno-0-113">113</a></span>
+<span class="normal"><a href="#__codelineno-0-114">114</a></span>
+<span class="normal"><a href="#__codelineno-0-115">115</a></span>
+<span class="normal"><a href="#__codelineno-0-116">116</a></span>
+<span class="normal"><a href="#__codelineno-0-117">117</a></span>
+<span class="normal"><a href="#__codelineno-0-118">118</a></span>
+<span class="normal"><a href="#__codelineno-0-119">119</a></span>
+<span class="normal"><a href="#__codelineno-0-120">120</a></span>
+<span class="normal"><a href="#__codelineno-0-121">121</a></span>
+<span class="normal"><a href="#__codelineno-0-122">122</a></span>
+<span class="normal"><a href="#__codelineno-0-123">123</a></span>
+<span class="normal"><a href="#__codelineno-0-124">124</a></span>
+<span class="normal"><a href="#__codelineno-0-125">125</a></span>
+<span class="normal"><a href="#__codelineno-0-126">126</a></span>
+<span class="normal"><a href="#__codelineno-0-127">127</a></span>
+<span class="normal"><a href="#__codelineno-0-128">128</a></span>
+<span class="normal"><a href="#__codelineno-0-129">129</a></span>
+<span class="normal"><a href="#__codelineno-0-130">130</a></span>
+<span class="normal"><a href="#__codelineno-0-131">131</a></span>
+<span class="normal"><a href="#__codelineno-0-132">132</a></span>
+<span class="normal"><a href="#__codelineno-0-133">133</a></span>
+<span class="normal"><a href="#__codelineno-0-134">134</a></span>
+<span class="normal"><a href="#__codelineno-0-135">135</a></span>
+<span class="normal"><a href="#__codelineno-0-136">136</a></span>
+<span class="normal"><a href="#__codelineno-0-137">137</a></span>
+<span class="normal"><a href="#__codelineno-0-138">138</a></span>
+<span class="normal"><a href="#__codelineno-0-139">139</a></span>
+<span class="normal"><a href="#__codelineno-0-140">140</a></span>
+<span class="normal"><a href="#__codelineno-0-141">141</a></span>
+<span class="normal"><a href="#__codelineno-0-142">142</a></span>
+<span class="normal"><a href="#__codelineno-0-143">143</a></span>
+<span class="normal"><a href="#__codelineno-0-144">144</a></span>
+<span class="normal"><a href="#__codelineno-0-145">145</a></span>
+<span class="normal"><a href="#__codelineno-0-146">146</a></span>
+<span class="normal"><a href="#__codelineno-0-147">147</a></span>
+<span class="normal"><a href="#__codelineno-0-148">148</a></span>
+<span class="normal"><a href="#__codelineno-0-149">149</a></span>
+<span class="normal"><a href="#__codelineno-0-150">150</a></span>
+<span class="normal"><a href="#__codelineno-0-151">151</a></span>
+<span class="normal"><a href="#__codelineno-0-152">152</a></span>
+<span class="normal"><a href="#__codelineno-0-153">153</a></span>
+<span class="normal"><a href="#__codelineno-0-154">154</a></span>
+<span class="normal"><a href="#__codelineno-0-155">155</a></span>
+<span class="normal"><a href="#__codelineno-0-156">156</a></span>
+<span class="normal"><a href="#__codelineno-0-157">157</a></span>
+<span class="normal"><a href="#__codelineno-0-158">158</a></span>
+<span class="normal"><a href="#__codelineno-0-159">159</a></span>
+<span class="normal"><a href="#__codelineno-0-160">160</a></span>
+<span class="normal"><a href="#__codelineno-0-161">161</a></span>
+<span class="normal"><a href="#__codelineno-0-162">162</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-100" name="__codelineno-0-100"></a><span class="k">def</span><span class="w"> </span><span class="nf">recognize</span><span class="p">(</span>
+<a id="__codelineno-0-101" name="__codelineno-0-101"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-102" name="__codelineno-0-102"></a>    <span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">],</span>
+<a id="__codelineno-0-103" name="__codelineno-0-103"></a>    <span class="n">panorama_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-104" name="__codelineno-0-104"></a>    <span class="n">show_progress</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-0-105" name="__codelineno-0-105"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OCRResult</span><span class="p">:</span>
+<a id="__codelineno-0-106" name="__codelineno-0-106"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Run OCR on a panorama image.</span>
+<a id="__codelineno-0-107" name="__codelineno-0-107"></a>
+<a id="__codelineno-0-108" name="__codelineno-0-108"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-109" name="__codelineno-0-109"></a><span class="sd">        image: Path to panorama image or PIL Image.</span>
+<a id="__codelineno-0-110" name="__codelineno-0-110"></a><span class="sd">        panorama_id: Optional identifier for the panorama.</span>
+<a id="__codelineno-0-111" name="__codelineno-0-111"></a><span class="sd">        show_progress: Whether to show a progress bar.</span>
+<a id="__codelineno-0-112" name="__codelineno-0-112"></a>
+<a id="__codelineno-0-113" name="__codelineno-0-113"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-114" name="__codelineno-0-114"></a><span class="sd">        OCRResult containing deduplicated sphere OCR results.</span>
+<a id="__codelineno-0-115" name="__codelineno-0-115"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-116" name="__codelineno-0-116"></a>    <span class="c1"># Get image path for result metadata</span>
+<a id="__codelineno-0-117" name="__codelineno-0-117"></a>    <span class="n">image_path</span> <span class="o">=</span> <span class="n">image</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+<a id="__codelineno-0-118" name="__codelineno-0-118"></a>    <span class="k">if</span> <span class="n">panorama_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-119" name="__codelineno-0-119"></a>        <span class="n">panorama_id</span> <span class="o">=</span> <span class="n">image_path</span> <span class="ow">or</span> <span class="s2">&quot;panorama&quot;</span>
+<a id="__codelineno-0-120" name="__codelineno-0-120"></a>
+<a id="__codelineno-0-121" name="__codelineno-0-121"></a>    <span class="c1"># Load panorama</span>
+<a id="__codelineno-0-122" name="__codelineno-0-122"></a>    <span class="n">pano</span> <span class="o">=</span> <span class="n">PanoramaImage</span><span class="p">(</span><span class="n">panorama_id</span><span class="o">=</span><span class="n">panorama_id</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">)</span>
+<a id="__codelineno-0-123" name="__codelineno-0-123"></a>
+<a id="__codelineno-0-124" name="__codelineno-0-124"></a>    <span class="c1"># Run OCR on each perspective</span>
+<a id="__codelineno-0-125" name="__codelineno-0-125"></a>    <span class="n">all_sphere_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-126" name="__codelineno-0-126"></a>
+<a id="__codelineno-0-127" name="__codelineno-0-127"></a>    <span class="n">perspective_iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perspectives</span>
+<a id="__codelineno-0-128" name="__codelineno-0-128"></a>    <span class="k">if</span> <span class="n">show_progress</span><span class="p">:</span>
+<a id="__codelineno-0-129" name="__codelineno-0-129"></a>        <span class="n">perspective_iter</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
+<a id="__codelineno-0-130" name="__codelineno-0-130"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">perspectives</span><span class="p">,</span>
+<a id="__codelineno-0-131" name="__codelineno-0-131"></a>            <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing perspectives&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-132" name="__codelineno-0-132"></a>            <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;perspective&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-133" name="__codelineno-0-133"></a>        <span class="p">)</span>
+<a id="__codelineno-0-134" name="__codelineno-0-134"></a>
+<a id="__codelineno-0-135" name="__codelineno-0-135"></a>    <span class="k">for</span> <span class="n">perspective</span> <span class="ow">in</span> <span class="n">perspective_iter</span><span class="p">:</span>
+<a id="__codelineno-0-136" name="__codelineno-0-136"></a>        <span class="c1"># Generate perspective view</span>
+<a id="__codelineno-0-137" name="__codelineno-0-137"></a>        <span class="n">persp_image</span> <span class="o">=</span> <span class="n">pano</span><span class="o">.</span><span class="n">generate_perspective_image</span><span class="p">(</span><span class="n">perspective</span><span class="p">)</span>
+<a id="__codelineno-0-138" name="__codelineno-0-138"></a>
+<a id="__codelineno-0-139" name="__codelineno-0-139"></a>        <span class="c1"># Run OCR</span>
+<a id="__codelineno-0-140" name="__codelineno-0-140"></a>        <span class="n">flat_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">recognize</span><span class="p">(</span><span class="n">persp_image</span><span class="o">.</span><span class="n">get_perspective_image</span><span class="p">())</span>
+<a id="__codelineno-0-141" name="__codelineno-0-141"></a>
+<a id="__codelineno-0-142" name="__codelineno-0-142"></a>        <span class="c1"># Convert to sphere coordinates</span>
+<a id="__codelineno-0-143" name="__codelineno-0-143"></a>        <span class="n">sphere_results</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-0-144" name="__codelineno-0-144"></a>            <span class="n">result</span><span class="o">.</span><span class="n">to_sphere</span><span class="p">(</span>
+<a id="__codelineno-0-145" name="__codelineno-0-145"></a>                <span class="n">horizontal_fov</span><span class="o">=</span><span class="n">perspective</span><span class="o">.</span><span class="n">horizontal_fov</span><span class="p">,</span>
+<a id="__codelineno-0-146" name="__codelineno-0-146"></a>                <span class="n">vertical_fov</span><span class="o">=</span><span class="n">perspective</span><span class="o">.</span><span class="n">vertical_fov</span><span class="p">,</span>
+<a id="__codelineno-0-147" name="__codelineno-0-147"></a>                <span class="n">yaw_offset</span><span class="o">=</span><span class="n">perspective</span><span class="o">.</span><span class="n">yaw_offset</span><span class="p">,</span>
+<a id="__codelineno-0-148" name="__codelineno-0-148"></a>                <span class="n">pitch_offset</span><span class="o">=</span><span class="n">perspective</span><span class="o">.</span><span class="n">pitch_offset</span><span class="p">,</span>
+<a id="__codelineno-0-149" name="__codelineno-0-149"></a>            <span class="p">)</span>
+<a id="__codelineno-0-150" name="__codelineno-0-150"></a>            <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">flat_results</span>
+<a id="__codelineno-0-151" name="__codelineno-0-151"></a>        <span class="p">]</span>
+<a id="__codelineno-0-152" name="__codelineno-0-152"></a>
+<a id="__codelineno-0-153" name="__codelineno-0-153"></a>        <span class="n">all_sphere_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sphere_results</span><span class="p">)</span>
+<a id="__codelineno-0-154" name="__codelineno-0-154"></a>
+<a id="__codelineno-0-155" name="__codelineno-0-155"></a>    <span class="c1"># Deduplicate across adjacent perspectives</span>
+<a id="__codelineno-0-156" name="__codelineno-0-156"></a>    <span class="n">deduplicated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deduplicate_results</span><span class="p">(</span><span class="n">all_sphere_results</span><span class="p">)</span>
+<a id="__codelineno-0-157" name="__codelineno-0-157"></a>
+<a id="__codelineno-0-158" name="__codelineno-0-158"></a>    <span class="k">return</span> <span class="n">OCRResult</span><span class="p">(</span>
+<a id="__codelineno-0-159" name="__codelineno-0-159"></a>        <span class="n">results</span><span class="o">=</span><span class="n">deduplicated</span><span class="p">,</span>
+<a id="__codelineno-0-160" name="__codelineno-0-160"></a>        <span class="n">image_path</span><span class="o">=</span><span class="n">image_path</span><span class="p">,</span>
+<a id="__codelineno-0-161" name="__codelineno-0-161"></a>        <span class="n">perspective_preset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_preset_name</span><span class="p">,</span>
+<a id="__codelineno-0-162" name="__codelineno-0-162"></a>    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="panoocr.api.client.PanoOCR.recognize_multi" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">recognize_multi</span>
+
+
+<a href="#panoocr.api.client.PanoOCR.recognize_multi" class="headerlink" title="Permanent link">#</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">recognize_multi</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Image</span><span class="p">],</span> <span class="n">presets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PerspectivePreset</span><span class="p">],</span> <span class="n">panorama_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">show_progress</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OCRResult</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Run OCR on a panorama using multiple perspective presets.</p>
+<p>Useful for multi-scale detection to catch both small and large text.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>image</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="str">str</span>, <span title="PIL.Image.Image">Image</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to panorama image or PIL Image.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>presets</code>
+            </td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<a class="autorefs autorefs-internal" title="            PerspectivePreset (panoocr.api.models.PerspectivePreset)" href="#panoocr.api.models.PerspectivePreset">PerspectivePreset</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of perspective presets to use.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>panorama_id</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional identifier for the panorama.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>show_progress</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to show a progress bar.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="            OCRResult
+
+
+  
+      dataclass
+   (panoocr.api.models.OCRResult)" href="#panoocr.api.models.OCRResult">OCRResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>OCRResult containing deduplicated sphere OCR results.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/panoocr/api/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-164">164</a></span>
+<span class="normal"><a href="#__codelineno-0-165">165</a></span>
+<span class="normal"><a href="#__codelineno-0-166">166</a></span>
+<span class="normal"><a href="#__codelineno-0-167">167</a></span>
+<span class="normal"><a href="#__codelineno-0-168">168</a></span>
+<span class="normal"><a href="#__codelineno-0-169">169</a></span>
+<span class="normal"><a href="#__codelineno-0-170">170</a></span>
+<span class="normal"><a href="#__codelineno-0-171">171</a></span>
+<span class="normal"><a href="#__codelineno-0-172">172</a></span>
+<span class="normal"><a href="#__codelineno-0-173">173</a></span>
+<span class="normal"><a href="#__codelineno-0-174">174</a></span>
+<span class="normal"><a href="#__codelineno-0-175">175</a></span>
+<span class="normal"><a href="#__codelineno-0-176">176</a></span>
+<span class="normal"><a href="#__codelineno-0-177">177</a></span>
+<span class="normal"><a href="#__codelineno-0-178">178</a></span>
+<span class="normal"><a href="#__codelineno-0-179">179</a></span>
+<span class="normal"><a href="#__codelineno-0-180">180</a></span>
+<span class="normal"><a href="#__codelineno-0-181">181</a></span>
+<span class="normal"><a href="#__codelineno-0-182">182</a></span>
+<span class="normal"><a href="#__codelineno-0-183">183</a></span>
+<span class="normal"><a href="#__codelineno-0-184">184</a></span>
+<span class="normal"><a href="#__codelineno-0-185">185</a></span>
+<span class="normal"><a href="#__codelineno-0-186">186</a></span>
+<span class="normal"><a href="#__codelineno-0-187">187</a></span>
+<span class="normal"><a href="#__codelineno-0-188">188</a></span>
+<span class="normal"><a href="#__codelineno-0-189">189</a></span>
+<span class="normal"><a href="#__codelineno-0-190">190</a></span>
+<span class="normal"><a href="#__codelineno-0-191">191</a></span>
+<span class="normal"><a href="#__codelineno-0-192">192</a></span>
+<span class="normal"><a href="#__codelineno-0-193">193</a></span>
+<span class="normal"><a href="#__codelineno-0-194">194</a></span>
+<span class="normal"><a href="#__codelineno-0-195">195</a></span>
+<span class="normal"><a href="#__codelineno-0-196">196</a></span>
+<span class="normal"><a href="#__codelineno-0-197">197</a></span>
+<span class="normal"><a href="#__codelineno-0-198">198</a></span>
+<span class="normal"><a href="#__codelineno-0-199">199</a></span>
+<span class="normal"><a href="#__codelineno-0-200">200</a></span>
+<span class="normal"><a href="#__codelineno-0-201">201</a></span>
+<span class="normal"><a href="#__codelineno-0-202">202</a></span>
+<span class="normal"><a href="#__codelineno-0-203">203</a></span>
+<span class="normal"><a href="#__codelineno-0-204">204</a></span>
+<span class="normal"><a href="#__codelineno-0-205">205</a></span>
+<span class="normal"><a href="#__codelineno-0-206">206</a></span>
+<span class="normal"><a href="#__codelineno-0-207">207</a></span>
+<span class="normal"><a href="#__codelineno-0-208">208</a></span>
+<span class="normal"><a href="#__codelineno-0-209">209</a></span>
+<span class="normal"><a href="#__codelineno-0-210">210</a></span>
+<span class="normal"><a href="#__codelineno-0-211">211</a></span>
+<span class="normal"><a href="#__codelineno-0-212">212</a></span>
+<span class="normal"><a href="#__codelineno-0-213">213</a></span>
+<span class="normal"><a href="#__codelineno-0-214">214</a></span>
+<span class="normal"><a href="#__codelineno-0-215">215</a></span>
+<span class="normal"><a href="#__codelineno-0-216">216</a></span>
+<span class="normal"><a href="#__codelineno-0-217">217</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-164" name="__codelineno-0-164"></a><span class="k">def</span><span class="w"> </span><span class="nf">recognize_multi</span><span class="p">(</span>
+<a id="__codelineno-0-165" name="__codelineno-0-165"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-166" name="__codelineno-0-166"></a>    <span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">],</span>
+<a id="__codelineno-0-167" name="__codelineno-0-167"></a>    <span class="n">presets</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">PerspectivePreset</span><span class="p">],</span>
+<a id="__codelineno-0-168" name="__codelineno-0-168"></a>    <span class="n">panorama_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-169" name="__codelineno-0-169"></a>    <span class="n">show_progress</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-0-170" name="__codelineno-0-170"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OCRResult</span><span class="p">:</span>
+<a id="__codelineno-0-171" name="__codelineno-0-171"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Run OCR on a panorama using multiple perspective presets.</span>
+<a id="__codelineno-0-172" name="__codelineno-0-172"></a>
+<a id="__codelineno-0-173" name="__codelineno-0-173"></a><span class="sd">    Useful for multi-scale detection to catch both small and large text.</span>
+<a id="__codelineno-0-174" name="__codelineno-0-174"></a>
+<a id="__codelineno-0-175" name="__codelineno-0-175"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-176" name="__codelineno-0-176"></a><span class="sd">        image: Path to panorama image or PIL Image.</span>
+<a id="__codelineno-0-177" name="__codelineno-0-177"></a><span class="sd">        presets: List of perspective presets to use.</span>
+<a id="__codelineno-0-178" name="__codelineno-0-178"></a><span class="sd">        panorama_id: Optional identifier for the panorama.</span>
+<a id="__codelineno-0-179" name="__codelineno-0-179"></a><span class="sd">        show_progress: Whether to show a progress bar.</span>
+<a id="__codelineno-0-180" name="__codelineno-0-180"></a>
+<a id="__codelineno-0-181" name="__codelineno-0-181"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-182" name="__codelineno-0-182"></a><span class="sd">        OCRResult containing deduplicated sphere OCR results.</span>
+<a id="__codelineno-0-183" name="__codelineno-0-183"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-184" name="__codelineno-0-184"></a>    <span class="c1"># Get image path for result metadata</span>
+<a id="__codelineno-0-185" name="__codelineno-0-185"></a>    <span class="n">image_path</span> <span class="o">=</span> <span class="n">image</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+<a id="__codelineno-0-186" name="__codelineno-0-186"></a>    <span class="k">if</span> <span class="n">panorama_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-187" name="__codelineno-0-187"></a>        <span class="n">panorama_id</span> <span class="o">=</span> <span class="n">image_path</span> <span class="ow">or</span> <span class="s2">&quot;panorama&quot;</span>
+<a id="__codelineno-0-188" name="__codelineno-0-188"></a>
+<a id="__codelineno-0-189" name="__codelineno-0-189"></a>    <span class="c1"># Combine perspectives from all presets</span>
+<a id="__codelineno-0-190" name="__codelineno-0-190"></a>    <span class="n">combined_perspectives</span> <span class="o">=</span> <span class="n">combine_perspectives</span><span class="p">(</span>
+<a id="__codelineno-0-191" name="__codelineno-0-191"></a>        <span class="o">*</span><span class="p">[</span><span class="n">_get_perspectives_for_preset</span><span class="p">(</span><span class="n">preset</span><span class="p">)</span> <span class="k">for</span> <span class="n">preset</span> <span class="ow">in</span> <span class="n">presets</span><span class="p">]</span>
+<a id="__codelineno-0-192" name="__codelineno-0-192"></a>    <span class="p">)</span>
+<a id="__codelineno-0-193" name="__codelineno-0-193"></a>
+<a id="__codelineno-0-194" name="__codelineno-0-194"></a>    <span class="c1"># Temporarily swap perspectives</span>
+<a id="__codelineno-0-195" name="__codelineno-0-195"></a>    <span class="n">original_perspectives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perspectives</span>
+<a id="__codelineno-0-196" name="__codelineno-0-196"></a>    <span class="n">original_preset_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_preset_name</span>
+<a id="__codelineno-0-197" name="__codelineno-0-197"></a>
+<a id="__codelineno-0-198" name="__codelineno-0-198"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">perspectives</span> <span class="o">=</span> <span class="n">combined_perspectives</span>
+<a id="__codelineno-0-199" name="__codelineno-0-199"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_preset_name</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-0-200" name="__codelineno-0-200"></a>
+<a id="__codelineno-0-201" name="__codelineno-0-201"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-202" name="__codelineno-0-202"></a>        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recognize</span><span class="p">(</span>
+<a id="__codelineno-0-203" name="__codelineno-0-203"></a>            <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
+<a id="__codelineno-0-204" name="__codelineno-0-204"></a>            <span class="n">panorama_id</span><span class="o">=</span><span class="n">panorama_id</span><span class="p">,</span>
+<a id="__codelineno-0-205" name="__codelineno-0-205"></a>            <span class="n">show_progress</span><span class="o">=</span><span class="n">show_progress</span><span class="p">,</span>
+<a id="__codelineno-0-206" name="__codelineno-0-206"></a>        <span class="p">)</span>
+<a id="__codelineno-0-207" name="__codelineno-0-207"></a>        <span class="c1"># Update result with multi-preset info</span>
+<a id="__codelineno-0-208" name="__codelineno-0-208"></a>        <span class="k">return</span> <span class="n">OCRResult</span><span class="p">(</span>
+<a id="__codelineno-0-209" name="__codelineno-0-209"></a>            <span class="n">results</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">results</span><span class="p">,</span>
+<a id="__codelineno-0-210" name="__codelineno-0-210"></a>            <span class="n">image_path</span><span class="o">=</span><span class="n">image_path</span><span class="p">,</span>
+<a id="__codelineno-0-211" name="__codelineno-0-211"></a>            <span class="n">perspective_preset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-212" name="__codelineno-0-212"></a>            <span class="n">perspective_presets</span><span class="o">=</span><span class="p">[</span><span class="n">preset</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">preset</span> <span class="ow">in</span> <span class="n">presets</span><span class="p">],</span>
+<a id="__codelineno-0-213" name="__codelineno-0-213"></a>        <span class="p">)</span>
+<a id="__codelineno-0-214" name="__codelineno-0-214"></a>    <span class="k">finally</span><span class="p">:</span>
+<a id="__codelineno-0-215" name="__codelineno-0-215"></a>        <span class="c1"># Restore original perspectives</span>
+<a id="__codelineno-0-216" name="__codelineno-0-216"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">perspectives</span> <span class="o">=</span> <span class="n">original_perspectives</span>
+<a id="__codelineno-0-217" name="__codelineno-0-217"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_preset_name</span> <span class="o">=</span> <span class="n">original_preset_name</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="panoocr.api.models.OCRResult" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">OCRResult</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#panoocr.api.models.OCRResult" class="headerlink" title="Permanent link">#</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">OCRResult</span><span class="p">(</span><span class="n">results</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">],</span> <span class="n">image_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">perspective_preset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">perspective_presets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>OCR output plus metadata, with preview-tool-friendly JSON export.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.models.OCRResult.results">results</span></code></td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<a class="autorefs autorefs-internal" title="            SphereOCRResult
+
+
+  
+      dataclass
+   (panoocr.ocr.models.SphereOCRResult)" href="ocr/#panoocr.ocr.models.SphereOCRResult">SphereOCRResult</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of deduplicated sphere OCR results.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.models.OCRResult.image_path">image_path</span></code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional path to the source image.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.models.OCRResult.perspective_preset">perspective_preset</span></code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the perspective preset used.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.models.OCRResult.perspective_presets">perspective_presets</span></code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Sequence">Sequence</span>[<span title="str">str</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of perspective preset names if multiple were used.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="panoocr.api.models.OCRResult.to_dict" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">to_dict</span>
+
+
+<a href="#panoocr.api.models.OCRResult.to_dict" class="headerlink" title="Permanent link">#</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">to_dict</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Convert to a dictionary for JSON serialization.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/panoocr/api/models.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-92"> 92</a></span>
+<span class="normal"><a href="#__codelineno-0-93"> 93</a></span>
+<span class="normal"><a href="#__codelineno-0-94"> 94</a></span>
+<span class="normal"><a href="#__codelineno-0-95"> 95</a></span>
+<span class="normal"><a href="#__codelineno-0-96"> 96</a></span>
+<span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
+<span class="normal"><a href="#__codelineno-0-98"> 98</a></span>
+<span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
+<span class="normal"><a href="#__codelineno-0-100">100</a></span>
+<span class="normal"><a href="#__codelineno-0-101">101</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-92" name="__codelineno-0-92"></a><span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-0-93" name="__codelineno-0-93"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert to a dictionary for JSON serialization.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-94" name="__codelineno-0-94"></a>    <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-0-95" name="__codelineno-0-95"></a>        <span class="s2">&quot;image_path&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_path</span><span class="p">,</span>
+<a id="__codelineno-0-96" name="__codelineno-0-96"></a>        <span class="s2">&quot;perspective_preset&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">perspective_preset</span><span class="p">,</span>
+<a id="__codelineno-0-97" name="__codelineno-0-97"></a>        <span class="s2">&quot;perspective_presets&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perspective_presets</span><span class="p">)</span>
+<a id="__codelineno-0-98" name="__codelineno-0-98"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perspective_presets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<a id="__codelineno-0-99" name="__codelineno-0-99"></a>        <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-100" name="__codelineno-0-100"></a>        <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">],</span>
+<a id="__codelineno-0-101" name="__codelineno-0-101"></a>    <span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="panoocr.api.models.OCRResult.save_json" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">save_json</span>
+
+
+<a href="#panoocr.api.models.OCRResult.save_json" class="headerlink" title="Permanent link">#</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">save_json</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Save OCR results in a JSON file suitable for the preview tool.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Output file path.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/panoocr/api/models.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-103">103</a></span>
+<span class="normal"><a href="#__codelineno-0-104">104</a></span>
+<span class="normal"><a href="#__codelineno-0-105">105</a></span>
+<span class="normal"><a href="#__codelineno-0-106">106</a></span>
+<span class="normal"><a href="#__codelineno-0-107">107</a></span>
+<span class="normal"><a href="#__codelineno-0-108">108</a></span>
+<span class="normal"><a href="#__codelineno-0-109">109</a></span>
+<span class="normal"><a href="#__codelineno-0-110">110</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-103" name="__codelineno-0-103"></a><span class="k">def</span><span class="w"> </span><span class="nf">save_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-104" name="__codelineno-0-104"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Save OCR results in a JSON file suitable for the preview tool.</span>
+<a id="__codelineno-0-105" name="__codelineno-0-105"></a>
+<a id="__codelineno-0-106" name="__codelineno-0-106"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-107" name="__codelineno-0-107"></a><span class="sd">        path: Output file path.</span>
+<a id="__codelineno-0-108" name="__codelineno-0-108"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-109" name="__codelineno-0-109"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-0-110" name="__codelineno-0-110"></a>        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="panoocr.api.models.OCRResult.from_dict" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">from_dict</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#panoocr.api.models.OCRResult.from_dict" class="headerlink" title="Permanent link">#</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;OCRResult&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Create an OCRResult from a dictionary.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>data</code>
+            </td>
+            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Dictionary with OCR result data.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>&#39;OCRResult&#39;</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>OCRResult instance.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/panoocr/api/models.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-112">112</a></span>
+<span class="normal"><a href="#__codelineno-0-113">113</a></span>
+<span class="normal"><a href="#__codelineno-0-114">114</a></span>
+<span class="normal"><a href="#__codelineno-0-115">115</a></span>
+<span class="normal"><a href="#__codelineno-0-116">116</a></span>
+<span class="normal"><a href="#__codelineno-0-117">117</a></span>
+<span class="normal"><a href="#__codelineno-0-118">118</a></span>
+<span class="normal"><a href="#__codelineno-0-119">119</a></span>
+<span class="normal"><a href="#__codelineno-0-120">120</a></span>
+<span class="normal"><a href="#__codelineno-0-121">121</a></span>
+<span class="normal"><a href="#__codelineno-0-122">122</a></span>
+<span class="normal"><a href="#__codelineno-0-123">123</a></span>
+<span class="normal"><a href="#__codelineno-0-124">124</a></span>
+<span class="normal"><a href="#__codelineno-0-125">125</a></span>
+<span class="normal"><a href="#__codelineno-0-126">126</a></span>
+<span class="normal"><a href="#__codelineno-0-127">127</a></span>
+<span class="normal"><a href="#__codelineno-0-128">128</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-112" name="__codelineno-0-112"></a><span class="nd">@classmethod</span>
+<a id="__codelineno-0-113" name="__codelineno-0-113"></a><span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;OCRResult&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-114" name="__codelineno-0-114"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an OCRResult from a dictionary.</span>
+<a id="__codelineno-0-115" name="__codelineno-0-115"></a>
+<a id="__codelineno-0-116" name="__codelineno-0-116"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-117" name="__codelineno-0-117"></a><span class="sd">        data: Dictionary with OCR result data.</span>
+<a id="__codelineno-0-118" name="__codelineno-0-118"></a>
+<a id="__codelineno-0-119" name="__codelineno-0-119"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-120" name="__codelineno-0-120"></a><span class="sd">        OCRResult instance.</span>
+<a id="__codelineno-0-121" name="__codelineno-0-121"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-122" name="__codelineno-0-122"></a>    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">SphereOCRResult</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[])]</span>
+<a id="__codelineno-0-123" name="__codelineno-0-123"></a>    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+<a id="__codelineno-0-124" name="__codelineno-0-124"></a>        <span class="n">results</span><span class="o">=</span><span class="n">results</span><span class="p">,</span>
+<a id="__codelineno-0-125" name="__codelineno-0-125"></a>        <span class="n">image_path</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_path&quot;</span><span class="p">),</span>
+<a id="__codelineno-0-126" name="__codelineno-0-126"></a>        <span class="n">perspective_preset</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;perspective_preset&quot;</span><span class="p">),</span>
+<a id="__codelineno-0-127" name="__codelineno-0-127"></a>        <span class="n">perspective_presets</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;perspective_presets&quot;</span><span class="p">),</span>
+<a id="__codelineno-0-128" name="__codelineno-0-128"></a>    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="panoocr.api.models.OCRResult.load_json" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">load_json</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#panoocr.api.models.OCRResult.load_json" class="headerlink" title="Permanent link">#</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">load_json</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;OCRResult&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Load OCR results from a JSON file.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Input file path.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>&#39;OCRResult&#39;</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>OCRResult instance.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/panoocr/api/models.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-130">130</a></span>
+<span class="normal"><a href="#__codelineno-0-131">131</a></span>
+<span class="normal"><a href="#__codelineno-0-132">132</a></span>
+<span class="normal"><a href="#__codelineno-0-133">133</a></span>
+<span class="normal"><a href="#__codelineno-0-134">134</a></span>
+<span class="normal"><a href="#__codelineno-0-135">135</a></span>
+<span class="normal"><a href="#__codelineno-0-136">136</a></span>
+<span class="normal"><a href="#__codelineno-0-137">137</a></span>
+<span class="normal"><a href="#__codelineno-0-138">138</a></span>
+<span class="normal"><a href="#__codelineno-0-139">139</a></span>
+<span class="normal"><a href="#__codelineno-0-140">140</a></span>
+<span class="normal"><a href="#__codelineno-0-141">141</a></span>
+<span class="normal"><a href="#__codelineno-0-142">142</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-130" name="__codelineno-0-130"></a><span class="nd">@classmethod</span>
+<a id="__codelineno-0-131" name="__codelineno-0-131"></a><span class="k">def</span><span class="w"> </span><span class="nf">load_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;OCRResult&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-132" name="__codelineno-0-132"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Load OCR results from a JSON file.</span>
+<a id="__codelineno-0-133" name="__codelineno-0-133"></a>
+<a id="__codelineno-0-134" name="__codelineno-0-134"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-135" name="__codelineno-0-135"></a><span class="sd">        path: Input file path.</span>
+<a id="__codelineno-0-136" name="__codelineno-0-136"></a>
+<a id="__codelineno-0-137" name="__codelineno-0-137"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-138" name="__codelineno-0-138"></a><span class="sd">        OCRResult instance.</span>
+<a id="__codelineno-0-139" name="__codelineno-0-139"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-140" name="__codelineno-0-140"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-0-141" name="__codelineno-0-141"></a>        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a id="__codelineno-0-142" name="__codelineno-0-142"></a>    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="panoocr.api.models.PerspectivePreset" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">PerspectivePreset</span>
+
+
+<a href="#panoocr.api.models.PerspectivePreset" class="headerlink" title="Permanent link">#</a></h2>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="str">str</span></code>, <code><span title="enum.Enum">Enum</span></code></p>
+
+
+
+        <p>Pre-defined perspective configurations for common text scales.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="panoocr.api.models.OCROptions" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">OCROptions</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#panoocr.api.models.OCROptions" class="headerlink" title="Permanent link">#</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">OCROptions</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Options passed to the underlying OCR engine.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.models.OCROptions.config">config</span></code></td>
+            <td>
+                  <code><span title="dict">dict</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Engine-specific configuration dictionary.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="panoocr.api.models.DedupOptions" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">DedupOptions</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#panoocr.api.models.DedupOptions" class="headerlink" title="Permanent link">#</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">DedupOptions</span><span class="p">(</span><span class="n">min_text_similarity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">min_intersection_ratio_for_similar_text</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">min_text_overlap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">min_intersection_ratio_for_overlapping_text</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">min_intersection_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Deduplication options applied after multi-view OCR.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.models.DedupOptions.min_text_similarity">min_text_similarity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum Levenshtein similarity for text comparison.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.models.DedupOptions.min_intersection_ratio_for_similar_text">min_intersection_ratio_for_similar_text</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum region overlap for similar texts.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.models.DedupOptions.min_text_overlap">min_text_overlap</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum overlap similarity for text comparison.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.models.DedupOptions.min_intersection_ratio_for_overlapping_text">min_intersection_ratio_for_overlapping_text</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum region overlap for overlapping texts.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="panoocr.api.models.DedupOptions.min_intersection_ratio">min_intersection_ratio</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minimum region intersection ratio threshold.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="module-structure">Module Structure<a class="headerlink" href="#module-structure" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>panoocr/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── api/              # Client API
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   ├── client.py     # PanoOCR
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   └── models.py     # OCRResult, options, OCREngine protocol
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── engines/          # OCR engines (lazily imported)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│   ├── macocr.py     # MacOCREngine (requires [macocr])
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   ├── easyocr.py    # EasyOCREngine (requires [easyocr])
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   ├── paddleocr.py  # PaddleOCREngine (requires [paddleocr])
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── florence2.py  # Florence2OCREngine (requires [florence2])
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   └── trocr.py      # TrOCREngine (requires [trocr])
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>├── ocr/              # OCR result models
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   ├── models.py     # FlatOCRResult, SphereOCRResult
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   └── utils.py      # Visualization (requires [viz])
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>├── dedup/            # Deduplication
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   └── detection.py  # SphereOCRDuplicationDetectionEngine
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>├── image/            # Panorama handling
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   ├── models.py     # PanoramaImage, PerspectiveMetadata
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   └── perspectives.py  # Presets, generate_perspectives()
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>└── geometry.py       # Coordinate conversion utilities
+</code></pre></div>
+<h2 id="submodules">Submodules<a class="headerlink" href="#submodules" title="Permanent link">#</a></h2>
+<ul>
+<li><a href="engines/">Engines</a> - <code>OCREngine</code> protocol and built-in engines</li>
+<li><a href="image/">Image</a> - Panorama and perspective classes</li>
+<li><a href="ocr/">OCR Models</a> - OCR result types</li>
+<li><a href="dedup/">Deduplication</a> - Text deduplication</li>
+<li><a href="geometry/">Geometry</a> - Coordinate conversion</li>
+<li><a href="visualization/">Visualization</a> - OCR visualization (requires <code>[viz]</code>)</li>
+</ul>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>

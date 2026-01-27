@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.1, mkdocs-terminal-4.7.8">
+    
+    <meta name="description" content="OCR for equirectangular panorama images with automatic perspective projection and deduplication"> 
+    
+    <meta name="author" content="Yufeng Zhao"> 
+    
+    <link rel="canonical" href="https://yz3440.github.io/panoocr/"><link rel="icon" type="image/png" sizes="192x192" href="img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png" />
+
+
+    
+ 
+<title>Home - PanoOCR</title>
+
+
+<link href="css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="css/normalize.css" rel="stylesheet">
+<link href="css/terminal.css" rel="stylesheet">
+<link href="css/theme.css" rel="stylesheet">
+<link href="css/theme.tile_grid.css" rel="stylesheet">
+<link href="css/theme.footer.css" rel="stylesheet">
+<!-- default color palette -->
+<link href="css/palettes/default.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+
+
+    
+    <link href="assets/_mkdocstrings.css" rel="stylesheet">  
+    
+    
+
+    
+    <!-- search css support -->
+<link href="css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = ".",
+    shortcuts = "{}";
+</script>
+<script src="js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="js/bootstrap/bootstrap.min.js" defer></script>
+<script src="js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="https://yz3440.github.io/panoocr/" class="no-style">PanoOCR</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="." class="menu-item active" property="item" typeof="WebPage">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="examples/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Examples</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                
+                    
+                    
+
+
+<li property="itemListElement" typeof="ListItem">
+    <a href="#" class="menu-item" data-toggle="modal" data-target="#mkdocs_search_modal" property="item" typeof="SearchAction">
+        <i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+    </a>
+    <meta property="position" content="2">
+</li>
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        <span class="terminal-mkdocs-side-nav-item--active">Home</span>
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="examples/">Examples</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+        
+        
+        
+            
+    
+        
+        
+            
+            
+            <span class="
+        
+    terminal-mkdocs-side-nav-item terminal-mkdocs-side-nav-section-no-index">API Reference</span>
+        
+    
+    
+        
+        
+            <ul class="terminal-mkdocs-side-nav-li-ul">
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="api/">Overview</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="api/engines/">Engines</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="api/image/">Image</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="api/ocr/">OCR Models</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="api/dedup/">Deduplication</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="api/geometry/">Geometry</a>
+        
+    
+    </li>
+            
+        
+            
+            
+             
+                <li class="terminal-mkdocs-side-nav-li-ul-li">
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="api/visualization/">Visualization</a>
+        
+    
+    </li>
+            
+            
+    </ul>
+        
+    
+       </li>
+        
+    </ul>
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#panoocr">PanoOCR</a></li>
+        <li><a href="#installation">Installation</a></li><li><a href="#quick-start">Quick Start</a></li><li><a href="#demo">Demo</a></li><li><a href="#next">Next</a></li>
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h1 id="panoocr">PanoOCR<a class="headerlink" href="#panoocr" title="Permanent link">#</a></h1>
+<p>OCR for equirectangular panorama images. Handles perspective projection, coordinate conversion, and text deduplication.</p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Lightweight (bring your own engine)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;panoocr @ git+https://github.com/yz3440/panoocr.git&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># With MacOCR (macOS only)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;panoocr[macocr]&quot;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># With EasyOCR (cross-platform)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;panoocr[easyocr]&quot;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># With all engines</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;panoocr[full] @ git+https://github.com/yz3440/panoocr.git&quot;</span>
+</code></pre></div>
+<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">panoocr</span><span class="w"> </span><span class="kn">import</span> <span class="n">PanoOCR</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">panoocr.engines.macocr</span><span class="w"> </span><span class="kn">import</span> <span class="n">MacOCREngine</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">MacOCREngine</span><span class="p">()</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">pano</span> <span class="o">=</span> <span class="n">PanoOCR</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">result</span> <span class="o">=</span> <span class="n">pano</span><span class="o">.</span><span class="n">recognize</span><span class="p">(</span><span class="s2">&quot;panorama.jpg&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">result</span><span class="o">.</span><span class="n">save_json</span><span class="p">(</span><span class="s2">&quot;results.ocr.json&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="demo">Demo<a class="headerlink" href="#demo" title="Permanent link">#</a></h2>
+<video controls width="100%">
+  <source src="https://github.com/user-attachments/assets/57507c48-ec88-4d4a-bf68-067eefc9d42f" type="video/mp4">
+</video>
+
+<p>The preview tool visualizes OCR results on an interactive 3D sphere.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span><span class="w"> </span>preview<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>http.server
+</code></pre></div>
+<p>Open <code>http://localhost:8000</code> and drag in the JSON result file and panorama image.</p>
+<h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">#</a></h2>
+<ul>
+<li><a href="examples/">Examples</a> - Working scripts</li>
+<li><a href="api/">API Reference</a> - Full documentation</li>
+</ul>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>
