@@ -1,4 +1,0 @@
-pillow
-py360convert
-geopandas
-textdistance
