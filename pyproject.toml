@@ -1,28 +1,95 @@
+[project]
+name = "panoocr"
+version = "0.2.0"
+description = "PanoOCR is a Python library for performing Optical Character Recognition (OCR) on equirectangular panorama images with automatic perspective projection and deduplication."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Yufeng Zhao", email = "yufeng-zhao@outlook.com" }
+]
+requires-python = ">=3.11"
+# Core dependencies - lightweight install for image processing utilities
+dependencies = [
+    "pillow>=10.0.0",
+    "py360convert>=0.1.0",
+    "geopandas>=0.14.0",
+    "shapely>=2.0.0",
+    "numpy>=1.24.0",
+    "textdistance>=4.5.0",
+    "tqdm>=4.60.0",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: General",
+]
+keywords = ["ocr", "panorama", "equirectangular", "360", "computer-vision", "text-recognition"]
+
+[project.optional-dependencies]
+# macOS Vision Framework OCR - install with: pip install "panoocr[macocr]"
+macocr = [
+    "ocrmac>=0.2.0",
+]
+# EasyOCR engine - install with: pip install "panoocr[easyocr]"
+easyocr = [
+    "easyocr>=1.7.0",
+]
+# PaddleOCR engine - install with: pip install "panoocr[paddleocr]"
+paddleocr = [
+    "paddleocr>=2.7.0",
+]
+# Florence-2 OCR engine - install with: pip install "panoocr[florence2]"
+florence2 = [
+    "torch>=2.0.0",
+    "transformers>=4.40.0",
+    "einops>=0.7.0",
+    "timm>=0.9.0",
+]
+# TrOCR engine (experimental) - install with: pip install "panoocr[trocr]"
+trocr = [
+    "torch>=2.0.0",
+    "transformers>=4.40.0",
+]
+# Visualization/debugging dependencies - install with: pip install "panoocr[viz]"
+viz = [
+    "opencv-python>=4.8.0",
+    "matplotlib>=3.7.0",
+    "scipy>=1.10.0",
+]
+# Full install with all features (excluding platform-specific macocr)
+full = ["panoocr[easyocr,paddleocr,florence2,viz]"]
+# Documentation dependencies - install with: pip install "panoocr[docs]"
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-terminal>=4.6.0",
+    "mkdocstrings[python]>=0.24.0",
+    "pymdown-extensions>=10.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yz3440/panoocr"
+Repository = "https://github.com/yz3440/panoocr"
+Issues = "https://github.com/yz3440/panoocr/issues"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[project]
-name = "panoocr"
-version = "0.1.0"
-description = "PanoOCR is a Python library for performing Optical Character Recognition (OCR) on equirectangular panorama images."
-authors = [
-    { name="Yufeng Zhao", email="yufeng.zhao.p@outlook.com" }
-]
-readme = "README.md"
-requires-python = ">=3.11"
-dependencies = [
-    "pillow",
-    "py360convert",
-    "geopandas",
-    "textdistance",
-]
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-]
+[tool.hatch.build.targets.wheel]
+packages = ["src/panoocr"]
 
-[project.urls]
-homepage = "https://github.com/yz3440/panoocr"
-issues = "https://github.com/yz3440/panoocr/issues"
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+]
+# Allow prerelease for transformers if needed
+prerelease = "if-necessary-or-explicit"

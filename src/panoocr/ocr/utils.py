@@ -1,38 +1,40 @@
-from typing import List
+"""Visualization utilities for OCR results.
+
+This module provides functions for visualizing OCR results on images.
+Some functions require optional dependencies (opencv-python, scipy).
+
+Install visualization dependencies with: pip install "panoocr[viz]"
+"""
+
+from __future__ import annotations
+
+from typing import List, Optional
+
 from PIL import Image, ImageDraw, ImageFont
+
 from .models import FlatOCRResult, SphereOCRResult
-from .engine import OCREngine, OCREngineType
-from typing import Any
 
 
-def create_ocr_engine(engine_type: OCREngineType, config: Any) -> OCREngine:
-    if engine_type == OCREngineType.MACOCR:
-        from .engines.macocr_engine import MacOCREngine
+def _check_viz_dependencies():
+    """Check if visualization dependencies are installed."""
+    missing = []
 
-        print("Initializing OCR Engine: MacOCR")
-        return MacOCREngine(config)
-    elif engine_type == OCREngineType.EASYOCR:
-        from .engines.easyocr_engine import EasyOCREngine
+    try:
+        import cv2
+    except ImportError:
+        missing.append("opencv-python")
 
-        print("Initializing OCR Engine: EasyOCR")
-        return EasyOCREngine(config)
-    elif engine_type == OCREngineType.PADDLEOCR:
-        from .engines.paddleocr_engine import PaddleOCREngine
+    try:
+        from scipy.ndimage import map_coordinates
+    except ImportError:
+        missing.append("scipy")
 
-        print("Initializing OCR Engine: PaddleOCR")
-        return PaddleOCREngine(config)
-    elif engine_type == OCREngineType.TROCR:
-        from .engines.trocr_engine import TrOCREngine
-
-        print("Initializing OCR Engine: TrOCR")
-        return TrOCREngine(config)
-    elif engine_type == OCREngineType.FLORENCE:
-        from .engines.florence2_engine import Florence2OCREngine
-
-        print("Initializing OCR Engine: Florence2")
-        return Florence2OCREngine(config)
-    else:
-        raise ValueError(f"Unsupported OCR engine type: {engine_type}")
+    if missing:
+        raise ImportError(
+            f"Visualization dependencies not installed: {', '.join(missing)}\n\n"
+            "Install with:\n"
+            "  pip install 'panoocr[viz]'"
+        )
 
 
 def visualize_ocr_results(
@@ -42,40 +44,50 @@ def visualize_ocr_results(
     highlight_color: str = "red",
     stroke_width: int = 2,
 ) -> Image.Image:
-    """
-    Visualize OCR results on an image.
+    """Visualize flat OCR results on an image.
+
+    Draws bounding boxes and labels on a copy of the image.
 
     Args:
         image: The image to visualize OCR results on.
-        ocr_results: A list of OCR results.
+        ocr_results: List of FlatOCRResult objects to visualize.
+        font_size: Font size for labels.
+        highlight_color: Color for boxes and text.
+        stroke_width: Width of bounding box lines.
 
     Returns:
-        Image.Image: The image with OCR results visualized.
+        Copy of the image with OCR results visualized.
     """
+    # Make a copy to avoid modifying the original
+    result_image = image.copy()
+    draw = ImageDraw.Draw(result_image)
+    width, height = result_image.size
 
-    draw = ImageDraw.Draw(image)
-    width, height = image.size
-
-    font = ImageFont.load_default(size=font_size)
+    try:
+        font = ImageFont.load_default(size=font_size)
+    except TypeError:
+        # Older Pillow versions don't support size parameter
+        font = ImageFont.load_default()
 
     for ocr_result in ocr_results:
+        # Draw bounding box
+        bbox = ocr_result.bounding_box
         draw.rectangle(
             [
-                ocr_result.bounding_box.left * width,
-                ocr_result.bounding_box.top * height,
-                ocr_result.bounding_box.right * width,
-                ocr_result.bounding_box.bottom * height,
+                bbox.left * width,
+                bbox.top * height,
+                bbox.right * width,
+                bbox.bottom * height,
             ],
             outline=highlight_color,
             width=3,
         )
-        # Draw the text
+
+        # Draw text label
         draw.text(
             (
-                ocr_result.bounding_box.left * width,
-                ocr_result.bounding_box.top * height
-                - font_size
-                - stroke_width,  # Move the text up so it doesn't overlap the bounding box
+                bbox.left * width,
+                bbox.top * height - font_size - stroke_width,
             ),
             ocr_result.text,
             fill=highlight_color,
@@ -83,12 +95,12 @@ def visualize_ocr_results(
             stroke_width=stroke_width,
             font=font,
         )
-        # Draw the confidence
+
+        # Draw confidence score
         draw.text(
             (
-                ocr_result.bounding_box.left * width,
-                ocr_result.bounding_box.bottom * height
-                + stroke_width,  # Move the text down so it doesn't overlap the bounding box
+                bbox.left * width,
+                bbox.bottom * height + stroke_width,
             ),
             f"{ocr_result.confidence:.2f}",
             fill=highlight_color,
@@ -97,7 +109,7 @@ def visualize_ocr_results(
             font=font,
         )
 
-    return image
+    return result_image
 
 
 def visualize_sphere_ocr_results(
@@ -106,24 +118,37 @@ def visualize_sphere_ocr_results(
     font_size: int = 16,
     highlight_color: str = "red",
     stroke_width: int = 2,
-    inplace: bool = True,
+    inplace: bool = False,
 ) -> Image.Image:
-    """
-    Visualize Sphere OCR results on an Equirectangular image.
+    """Visualize spherical OCR results on an equirectangular image.
+
+    Projects OCR result labels back onto the panorama image.
     This is SLOW and should only be used for debugging purposes.
 
     Args:
-        image: The Equirectangular image to visualize OCR results on.
-        ocr_results: A list of Sphere OCR results.
+        image: The equirectangular panorama image.
+        ocr_results: List of SphereOCRResult objects to visualize.
+        font_size: Font size for labels (unused, size is automatic).
+        highlight_color: Color for boxes and text.
+        stroke_width: Width of text stroke.
+        inplace: If True, modify the input image directly (faster).
 
+    Returns:
+        Image with OCR results visualized.
+
+    Raises:
+        ImportError: If visualization dependencies are not installed.
     """
+    _check_viz_dependencies()
+
     import numpy as np
     from scipy.ndimage import map_coordinates
 
-    # Convert image to RGBA
+    # Convert image to RGBA for alpha compositing
     image = image.convert("RGBA")
 
     def get_ocr_result_image(ocr_result: SphereOCRResult) -> Image.Image:
+        """Create an image for a single OCR result."""
         PIXEL_PER_DEGREE = 300
 
         text_image = Image.new(
@@ -136,8 +161,15 @@ def visualize_sphere_ocr_results(
         )
 
         draw = ImageDraw.Draw(text_image)
-        font = ImageFont.load_default(size=ocr_result.height * PIXEL_PER_DEGREE * 0.2)
 
+        try:
+            font = ImageFont.load_default(
+                size=int(ocr_result.height * PIXEL_PER_DEGREE * 0.2)
+            )
+        except TypeError:
+            font = ImageFont.load_default()
+
+        # Draw bounding box
         draw.rectangle(
             [0, 0, text_image.width, text_image.height],
             outline=highlight_color,
@@ -145,6 +177,7 @@ def visualize_sphere_ocr_results(
             fill=(255, 255, 255, 0),
         )
 
+        # Draw text
         draw.text(
             (text_image.width / 2, text_image.height / 2),
             ocr_result.text,
@@ -154,15 +187,17 @@ def visualize_sphere_ocr_results(
             stroke_width=stroke_width,
             font=font,
         )
+
         return text_image
 
-    def place_ocr_result_on_panorama(panorama_image, ocr_result):
-        ocr_result_image = get_ocr_result_image(ocr_result)
+    def place_ocr_result_on_panorama(
+        panorama_array: np.ndarray, ocr_result: SphereOCRResult
+    ) -> np.ndarray:
+        """Project an OCR result onto the panorama."""
+        ocr_result_image = np.array(get_ocr_result_image(ocr_result))
 
-        ocr_result_image = np.array(ocr_result_image)
-
-        pano_height, pano_width = panorama_image.shape[:2]
-        ocr_result_height, ocr_result_width = ocr_result_image.shape[:2]
+        pano_height, pano_width = panorama_array.shape[:2]
+        ocr_height, ocr_width = ocr_result_image.shape[:2]
 
         yaw_rad = np.radians(-ocr_result.yaw)
         pitch_rad = np.radians(ocr_result.pitch)
@@ -176,7 +211,7 @@ def visualize_sphere_ocr_results(
         lon = (x_pano / pano_width - 0.5) * 2 * np.pi
         lat = (0.5 - y_pano / pano_height) * np.pi
 
-        # Calculate the 3D coordinates on the unit sphere
+        # Calculate 3D coordinates on the unit sphere
         x = np.cos(lat) * np.sin(lon)
         y = np.sin(lat)
         z = np.cos(lat) * np.cos(lon)
@@ -191,23 +226,24 @@ def visualize_sphere_ocr_results(
         z_rot = -cos_pitch * sin_yaw * x + sin_pitch * y + cos_pitch * cos_yaw * z
 
         # Project onto the plane
-        x_proj = x_rot / (z_rot + 1e-8)  # Add small epsilon to avoid division by zero
-        y_proj = y_rot / (z_rot + 1e-8)
+        epsilon = 1e-8
+        x_proj = x_rot / (z_rot + epsilon)
+        y_proj = y_rot / (z_rot + epsilon)
 
         # Scale and shift to image coordinates
-        x_img = (x_proj / np.tan(width_rad / 2) + 1) * ocr_result_width / 2
-        y_img = (-y_proj / np.tan(height_rad / 2) + 1) * ocr_result_height / 2
+        x_img = (x_proj / np.tan(width_rad / 2) + 1) * ocr_width / 2
+        y_img = (-y_proj / np.tan(height_rad / 2) + 1) * ocr_height / 2
 
         # Create mask for valid coordinates
         mask = (
             (x_img >= 0)
-            & (x_img < ocr_result_width)
+            & (x_img < ocr_width)
             & (y_img >= 0)
-            & (y_img < ocr_result_height)
+            & (y_img < ocr_height)
             & (z_rot > 0)
         )
 
-        # Use map_coordinates to sample from the image
+        # Sample from the OCR result image
         warped_channels = []
         for channel in range(ocr_result_image.shape[2]):
             warped_channel = map_coordinates(
@@ -221,26 +257,25 @@ def visualize_sphere_ocr_results(
 
         warped_image = np.stack(warped_channels, axis=-1)
 
-        # save the warped_image
-        # temp_warped_image = Image.fromarray(warped_image)
-        # temp_warped_image.save("assets/warped_image.png")
-
         if not inplace:
-            result = panorama_image.copy()
+            result = panorama_array.copy()
         else:
-            result = panorama_image
+            result = panorama_array
 
         # Apply alpha compositing
         alpha = warped_image[:, :, 3] / 255.0
         for c in range(3):  # RGB channels
-            result[:, :, c] = result[:, :, c] * (1 - alpha * mask) + warped_image[
-                :, :, c
-            ] * (alpha * mask)
+            result[:, :, c] = (
+                result[:, :, c] * (1 - alpha * mask)
+                + warped_image[:, :, c] * (alpha * mask)
+            )
 
         # Update alpha channel
         result[:, :, 3] = np.maximum(result[:, :, 3], warped_image[:, :, 3] * mask)
 
         return result
+
+    import numpy as np
 
     new_image = np.array(image)
 
@@ -252,7 +287,7 @@ def visualize_sphere_ocr_results(
 
     new_image = Image.fromarray(new_image)
 
-    # convert back to rgb
+    # Convert back to RGB
     new_image = new_image.convert("RGB")
 
     return new_image

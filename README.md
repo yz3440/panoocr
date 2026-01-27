@@ -1,115 +1,226 @@
 # PanoOCR
 
-PanoOCR is a Python library for performing Optical Character Recognition (OCR) on equirectangular panorama images. It automatically handles the conversion between flat and spherical coordinates, making it ideal for OCR tasks involving 360° panoramic content.
-
-## Demo
-
-This is a demo using the built-in [preview tool](#interactive-preview-tool) with the test results in `/assets` folder.
-
-https://github.com/user-attachments/assets/57507c48-ec88-4d4a-bf68-067eefc9d42f
-
-The [test image](./assets/test-pano.jpg) is taken by the author himself and is copyright-free. Feel free to use it as you wish.
+PanoOCR is a Python library for performing Optical Character Recognition (OCR) on equirectangular panorama images with automatic perspective projection and deduplication.
 
 ## Features
 
-- Support for multiple OCR engines:
-  - macOCR (macOS native OCR)
-  - PaddleOCR (with optional V4 server model)
-  - EasyOCR
-  - Florence2
-  - TrOCR
-- Automatic perspective generation from equirectangular panoramas
-- Spherical coordinate conversion
-- Duplication detection and removal across perspectives
-- Multi-language support (depending on OCR engine)
-- Interactive preview tool for visualization
+- **Multiple OCR Engines**: Support for MacOCR (Apple Vision), EasyOCR, PaddleOCR, Florence-2, and TrOCR
+- **Automatic Perspective Projection**: Converts equirectangular panoramas to multiple perspective views for better OCR accuracy
+- **Deduplication**: Automatically removes duplicate text detections across overlapping perspective views
+- **Spherical Coordinates**: Returns OCR results in yaw/pitch coordinates that map directly to the panorama
+- **Preview Tool**: Interactive 3D preview of OCR results on the panorama
 
 ## Installation
 
-1. Clone the repository:
-
-   ```bash
-   git clone [repository-url]
-   cd panoocr
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Install ocr-engine-specific requirements based on your needs:
-
-   ```bash
-   # For PaddleOCR
-   pip install -r requirements-paddle.txt
-
-   # For EasyOCR
-   pip install -r requirements-easyocr.txt
-
-   # For macOCR (macOS native ocr, aka. Apple Vision Framework)
-   pip install -r requirements-mac.txt
-
-   # For Florence2
-   pip install -r requirements-huggingface.txt
-   ```
-
-## Usage
-
-### Basic Usage
-
-The basic usage is showcased in [`run_panoocr.py`](run_panoocr.py)
-
-To run the script, simply execute:
+Install the base package:
 
 ```bash
-python run_panoocr.py --ocr-engine [ocr-engine-name] --image-path [path-to-panorama-image]
+pip install panoocr
 ```
 
-The result will be saved in the same folder of the original image, with the same filename but with a different extension: `.[ocr-engine-name].json`
+Install with OCR engine dependencies:
 
-## Core Components
+```bash
+# macOS (Apple Vision Framework)
+pip install "panoocr[macocr]"
 
-The core building blocks of `panoocr` are:
+# EasyOCR (cross-platform)
+pip install "panoocr[easyocr]"
 
-- `OCREngine`: Represents an OCR engine.
-- `SphereOCRDuplicationDetectionEngine`: Represents a duplication detection engine.
-- `PanoramaImage`: Represents an equirectangular panorama image.
-- `PerspectiveMetadata`: Represents a perspective view of the panorama.
+# PaddleOCR (cross-platform)
+pip install "panoocr[paddleocr]"
 
-For the two engines, `OCREngine` and `SphereOCRDuplicationDetectionEngine`, you can bring your own implementations via inheritance. Their APIs are defined in [`engine.py`](panoocr/ocr/engine.py) and [`duplication_detection.py`](panoocr/ocr/duplication_detection.py) respectively.
+# Florence-2 (requires GPU recommended)
+pip install "panoocr[florence2]"
 
-By default, `run_panoocr.py` uses `po.DEFAULT_IMAGE_PERSPECTIVES` which is 16 perspectives with the following settings:
+# All engines (excluding platform-specific macocr)
+pip install "panoocr[full]"
+```
 
-- pixel_width: 2048
-- pixel_height: 2048
-- 45° horizontal field of view
-- 0° yaw offset
-- 0° pitch offset
-- 22.5° yaw interval
+Using uv (recommended):
 
-You can also specify different perspective settings by directly constructing `PerspectiveMetadata` objects as such:
+```bash
+uv add panoocr
+uv add "panoocr[macocr]"  # or other extras
+```
+
+## Quick Start
 
 ```python
-perspective = po.PerspectiveMetadata(
-  pixel_width=1024,
-  pixel_height=512,
-  horizontal_fov=45,
-  vertical_fov=45,
-  yaw_offset=0,
-  pitch_offset=0,
+from panoocr import PanoOCR
+from panoocr.engines.macocr import MacOCREngine  # or other engines
+
+# Create an OCR engine
+engine = MacOCREngine()
+
+# Create the PanoOCR pipeline
+pano = PanoOCR(engine)
+
+# Run OCR on a panorama
+result = pano.recognize("panorama.jpg")
+
+# Save results as JSON
+result.save_json("results.json")
+
+# Access individual results
+for r in result.results:
+    print(f"Text: {r.text}")
+    print(f"Position: yaw={r.yaw}°, pitch={r.pitch}°")
+    print(f"Confidence: {r.confidence}")
+```
+
+## Available OCR Engines
+
+### MacOCREngine (macOS only)
+
+Uses Apple's Vision Framework for fast, accurate OCR on macOS.
+
+```python
+from panoocr.engines.macocr import MacOCREngine, MacOCRLanguageCode
+
+engine = MacOCREngine(config={
+    "language_preference": [MacOCRLanguageCode.ENGLISH_US],
+})
+```
+
+### EasyOCREngine
+
+Cross-platform OCR supporting 80+ languages.
+
+```python
+from panoocr.engines.easyocr import EasyOCREngine, EasyOCRLanguageCode
+
+engine = EasyOCREngine(config={
+    "language_preference": [EasyOCRLanguageCode.ENGLISH],
+    "gpu": True,
+})
+```
+
+### PaddleOCREngine
+
+PaddlePaddle-based OCR with optional V4 server model for Chinese text.
+
+```python
+from panoocr.engines.paddleocr import PaddleOCREngine, PaddleOCRLanguageCode
+
+engine = PaddleOCREngine(config={
+    "language_preference": PaddleOCRLanguageCode.CHINESE,
+    "use_v4_server": True,
+})
+```
+
+### Florence2OCREngine
+
+Microsoft's Florence-2 vision-language model for OCR.
+
+```python
+from panoocr.engines.florence2 import Florence2OCREngine
+
+engine = Florence2OCREngine(config={
+    "model_id": "microsoft/Florence-2-large",
+})
+```
+
+## Advanced Usage
+
+### Custom Perspectives
+
+```python
+from panoocr import PanoOCR, PerspectivePreset, generate_perspectives
+
+# Use a preset
+pano = PanoOCR(engine, perspectives=PerspectivePreset.ZOOMED_IN)
+
+# Or create custom perspectives
+custom_perspectives = generate_perspectives(
+    pixel_size=1024,
+    horizontal_fov=30,
+    vertical_fov=30,
+    pitch_offsets=[0, 15, -15],  # Multiple rows
+)
+pano = PanoOCR(engine, perspectives=custom_perspectives)
+```
+
+### Multi-Scale Detection
+
+```python
+from panoocr import PanoOCR, PerspectivePreset
+
+pano = PanoOCR(engine)
+
+# Run OCR at multiple scales to catch both small and large text
+result = pano.recognize_multi(
+    "panorama.jpg",
+    presets=[
+        PerspectivePreset.ZOOMED_IN,
+        PerspectivePreset.DEFAULT,
+    ],
 )
 ```
 
-## Interactive Preview Tool
+### Custom Deduplication Settings
 
-I also built a web-based interactive preview tool that allows you to visualize the OCR results on the panorama image. It's located in `preview/index.html`. To run it, run a http server in the `preview` folder:
+```python
+from panoocr import PanoOCR, DedupOptions
 
-```bash
-cd preview && python -m http.server
+pano = PanoOCR(
+    engine,
+    dedup_options=DedupOptions(
+        min_text_similarity=0.6,
+        min_intersection_ratio=0.2,
+    ),
+)
 ```
 
-Then, open your browser and navigate to `http://localhost:8000`, you should see the preview tool.
+### Using the Protocol for Custom Engines
 
-Simply drag and drop the JSON result file and your panorama image to the interface, and you should see the OCR results overlaid on the panorama image.
+You can create your own OCR engine by implementing the `OCREngine` protocol:
+
+```python
+from panoocr import OCREngine, FlatOCRResult
+from PIL import Image
+
+class MyCustomEngine:
+    def recognize(self, image: Image.Image) -> list[FlatOCRResult]:
+        # Your OCR implementation here
+        # Return results with normalized bounding boxes (0-1 range)
+        ...
+
+# No inheritance required - just implement the method
+engine = MyCustomEngine()
+pano = PanoOCR(engine)
+```
+
+## Preview Tool
+
+The package includes an interactive HTML preview tool for visualizing OCR results on the panorama. Open `preview/index.html` in a browser and drag & drop your panorama image and JSON results file.
+
+## Output Format
+
+OCR results are returned as `SphereOCRResult` objects with spherical coordinates:
+
+```json
+{
+  "results": [
+    {
+      "text": "HELLO WORLD",
+      "confidence": 0.95,
+      "yaw": 45.0,
+      "pitch": 0.0,
+      "width": 10.5,
+      "height": 3.2,
+      "engine": "APPLE_VISION_FRAMEWORK"
+    }
+  ],
+  "image_path": "panorama.jpg",
+  "perspective_preset": "default"
+}
+```
+
+- `yaw`: Horizontal angle in degrees (-180 to 180)
+- `pitch`: Vertical angle in degrees (-90 to 90)
+- `width`, `height`: Angular dimensions in degrees
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.

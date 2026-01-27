@@ -1,11 +1,29 @@
-from typing import List, Tuple
-from dataclasses import dataclass
+"""OCR result models with coordinate transformation support."""
+
+from __future__ import annotations
+
 import math
+from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
 class BoundingBox:
-    # distance form the top-left corner of the image
+    """Normalized bounding box with coordinates in 0-1 range.
+
+    Coordinates are relative to image dimensions:
+    - (0, 0) is top-left
+    - (1, 1) is bottom-right
+
+    Attributes:
+        left: Distance from left edge (0-1).
+        top: Distance from top edge (0-1).
+        right: Distance from left edge to right side (0-1).
+        bottom: Distance from top edge to bottom side (0-1).
+        width: Box width (0-1).
+        height: Box height (0-1).
+    """
+
     left: float
     top: float
     right: float
@@ -13,53 +31,85 @@ class BoundingBox:
     width: float
     height: float
 
+    def to_dict(self) -> dict:
+        """Convert to dictionary."""
+        return {
+            "left": self.left,
+            "top": self.top,
+            "right": self.right,
+            "bottom": self.bottom,
+            "width": self.width,
+            "height": self.height,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "BoundingBox":
+        """Create from dictionary."""
+        return cls(
+            left=data["left"],
+            top=data["top"],
+            right=data["right"],
+            bottom=data["bottom"],
+            width=data["width"],
+            height=data["height"],
+        )
+
 
 @dataclass
 class FlatOCRResult:
+    """OCR result from a flat (perspective) image.
+
+    Attributes:
+        text: Recognized text content.
+        confidence: Recognition confidence (0-1).
+        bounding_box: Normalized bounding box in image coordinates.
+        engine: Name of the OCR engine used.
+    """
+
     text: str
     confidence: float
     bounding_box: BoundingBox
-    engine: str | None = None
+    engine: Optional[str] = None
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
+        """Convert to dictionary."""
         return {
             "text": self.text,
             "confidence": self.confidence,
-            "bounding_box": {
-                "left": self.bounding_box.left,
-                "top": self.bounding_box.top,
-                "right": self.bounding_box.right,
-                "bottom": self.bounding_box.bottom,
-                "width": self.bounding_box.width,
-                "height": self.bounding_box.height,
-            },
+            "bounding_box": self.bounding_box.to_dict(),
             "engine": self.engine,
         }
 
-    def __uv_to_yaw_pitch(
+    @classmethod
+    def from_dict(cls, data: dict) -> "FlatOCRResult":
+        """Create from dictionary."""
+        return cls(
+            text=data["text"],
+            confidence=data["confidence"],
+            bounding_box=BoundingBox.from_dict(data["bounding_box"]),
+            engine=data.get("engine"),
+        )
+
+    def _uv_to_yaw_pitch(
         self, horizontal_fov: float, vertical_fov: float, u: float, v: float
-    ):
-        """
-        Convert the UV coordinate to yaw and pitch using the camera parameters.
-        All the parameters are in degrees.
+    ) -> tuple[float, float]:
+        """Convert UV coordinate to yaw and pitch using camera parameters.
+
+        All parameters are in degrees.
 
         Args:
-            horizontal_fov (float): horizontal field of view of the camera
-            vertical_fov (float): vertical field of view of the camera
-            u (float): horizontal coordinate on flat image
-            v (float): vertical coordinate on flat image
+            horizontal_fov: Horizontal field of view of the camera.
+            vertical_fov: Vertical field of view of the camera.
+            u: Horizontal coordinate on flat image (0-1).
+            v: Vertical coordinate on flat image (0-1).
 
         Returns:
-            Tuple[float, float]: the converted yaw and pitch
+            Tuple of (yaw, pitch) in degrees.
         """
-
-        if horizontal_fov is None or vertical_fov is None or u is None or v is None:
-            raise ValueError("Missing parameters")
-
-        if horizontal_fov < 0 or vertical_fov < 0:
+        if horizontal_fov <= 0 or vertical_fov <= 0:
             raise ValueError("FOV must be positive")
 
-        # Translate the origin to the center of the image
+        # Translate origin to center of image
         u = u - 0.5
         v = 0.5 - v
 
@@ -74,45 +124,37 @@ class FlatOCRResult:
         vertical_fov: float,
         yaw_offset: float,
         pitch_offset: float,
-    ):
-        """
-        Convert the flat OCR result to a spherical OCR result using the camera parameters.
-        All the parameters are in degrees.
+    ) -> "SphereOCRResult":
+        """Convert to spherical OCR result using camera parameters.
+
+        All parameters are in degrees.
 
         Args:
-            horizontal_fov (float): horizontal field of view of the camera
-            vertical_fov (float): vertical field of view of the camera
-            yaw_offset (float): horizontal offset of the camera
-            pitch_offset (float): vertical offset of the camera
+            horizontal_fov: Horizontal field of view of the camera.
+            vertical_fov: Vertical field of view of the camera.
+            yaw_offset: Horizontal offset of the camera.
+            pitch_offset: Vertical offset of the camera.
 
         Returns:
-            SphereOCRResult: the converted OCR result
+            SphereOCRResult with spherical coordinates.
         """
-
-        # check if all the parameters are present
-        if (
-            horizontal_fov is None
-            or vertical_fov is None
-            or yaw_offset is None
-            or pitch_offset is None
-        ):
-            print(horizontal_fov, vertical_fov, yaw_offset, pitch_offset)
-            raise ValueError("Missing parameters")
-        if horizontal_fov < 0 or vertical_fov < 0:
+        if horizontal_fov <= 0 or vertical_fov <= 0:
             raise ValueError("FOV must be positive")
 
-        centerX = (self.bounding_box.left + self.bounding_box.right) * 0.5
-        centerY = (self.bounding_box.top + self.bounding_box.bottom) * 0.5
+        # Calculate center point
+        center_x = (self.bounding_box.left + self.bounding_box.right) * 0.5
+        center_y = (self.bounding_box.top + self.bounding_box.bottom) * 0.5
 
-        center_yaw, center_pitch = self.__uv_to_yaw_pitch(
-            horizontal_fov, vertical_fov, centerX, centerY
+        center_yaw, center_pitch = self._uv_to_yaw_pitch(
+            horizontal_fov, vertical_fov, center_x, center_y
         )
 
-        left_yaw, top_pitch = self.__uv_to_yaw_pitch(
+        # Calculate corners for width/height
+        left_yaw, top_pitch = self._uv_to_yaw_pitch(
             horizontal_fov, vertical_fov, self.bounding_box.left, self.bounding_box.top
         )
 
-        right_yaw, bottom_pitch = self.__uv_to_yaw_pitch(
+        right_yaw, bottom_pitch = self._uv_to_yaw_pitch(
             horizontal_fov,
             vertical_fov,
             self.bounding_box.right,
@@ -133,20 +175,30 @@ class FlatOCRResult:
         )
 
 
-
-
-
 @dataclass
 class SphereOCRResult:
+    """OCR result in spherical (panorama) coordinates.
+
+    Attributes:
+        text: Recognized text content.
+        confidence: Recognition confidence (0-1).
+        yaw: Horizontal angle in degrees (-180 to 180).
+        pitch: Vertical angle in degrees (-90 to 90).
+        width: Angular width in degrees.
+        height: Angular height in degrees.
+        engine: Name of the OCR engine used.
+    """
+
     text: str
     confidence: float
     yaw: float
     pitch: float
     width: float
     height: float
-    engine: str | None = None
+    engine: Optional[str] = None
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
+        """Convert to dictionary."""
         return {
             "text": self.text,
             "confidence": self.confidence,
@@ -156,3 +208,16 @@ class SphereOCRResult:
             "height": self.height,
             "engine": self.engine,
         }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "SphereOCRResult":
+        """Create from dictionary."""
+        return cls(
+            text=data["text"],
+            confidence=data["confidence"],
+            yaw=data["yaw"],
+            pitch=data["pitch"],
+            width=data["width"],
+            height=data["height"],
+            engine=data.get("engine"),
+        )
