@@ -21,7 +21,7 @@ Install OCR engine dependencies:
     - All engines: pip install "panoocr[full]"
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 # Pipeline-first public API
 from .api import (
