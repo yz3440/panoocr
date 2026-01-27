@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
@@ -81,8 +82,30 @@ class SphereOCRDuplicationDetectionEngine:
         )
         self.min_intersection_ratio = min_intersection_ratio
 
-    def _sphere_ocr_to_polygon(self, sphere_ocr: SphereOCRResult) -> Polygon:
-        """Convert a sphere OCR result to a polygon in yaw/pitch space."""
+    def _has_valid_coordinates(self, sphere_ocr: SphereOCRResult) -> bool:
+        """Check if a sphere OCR result has valid (finite) coordinates.
+
+        Args:
+            sphere_ocr: The OCR result to validate.
+
+        Returns:
+            True if all coordinates are finite, False if any are NaN or Inf.
+        """
+        values = [sphere_ocr.yaw, sphere_ocr.pitch, sphere_ocr.width, sphere_ocr.height]
+        return all(math.isfinite(v) for v in values)
+
+    def _sphere_ocr_to_polygon(self, sphere_ocr: SphereOCRResult) -> Optional[Polygon]:
+        """Convert a sphere OCR result to a polygon in yaw/pitch space.
+
+        Args:
+            sphere_ocr: The OCR result to convert.
+
+        Returns:
+            A Polygon in yaw/pitch space, or None if coordinates are invalid.
+        """
+        if not self._has_valid_coordinates(sphere_ocr):
+            return None
+
         half_width = sphere_ocr.width / 2
         half_height = sphere_ocr.height / 2
 
@@ -106,9 +129,21 @@ class SphereOCRDuplicationDetectionEngine:
         gdf.to_crs(3857, inplace=True)
         return gdf
 
-    def _sphere_ocr_to_gdf(self, sphere_ocr: SphereOCRResult) -> gpd.GeoDataFrame:
-        """Convert a sphere OCR result to a GeoDataFrame."""
-        return self._polygon_to_gdf(self._sphere_ocr_to_polygon(sphere_ocr))
+    def _sphere_ocr_to_gdf(
+        self, sphere_ocr: SphereOCRResult
+    ) -> Optional[gpd.GeoDataFrame]:
+        """Convert a sphere OCR result to a GeoDataFrame.
+
+        Args:
+            sphere_ocr: The OCR result to convert.
+
+        Returns:
+            A GeoDataFrame, or None if coordinates are invalid.
+        """
+        polygon = self._sphere_ocr_to_polygon(sphere_ocr)
+        if polygon is None:
+            return None
+        return self._polygon_to_gdf(polygon)
 
     def _get_intersection(
         self, gdf_1: gpd.GeoDataFrame, gdf_2: gpd.GeoDataFrame
@@ -138,9 +173,21 @@ class SphereOCRDuplicationDetectionEngine:
         ocr_result_1: SphereOCRResult,
         ocr_result_2: SphereOCRResult,
     ) -> Optional[RegionIntersection]:
-        """Calculate the intersection between two OCR results."""
+        """Calculate the intersection between two OCR results.
+
+        Args:
+            ocr_result_1: First OCR result.
+            ocr_result_2: Second OCR result.
+
+        Returns:
+            RegionIntersection if both results have valid coordinates, None otherwise.
+        """
         gdf_1 = self._sphere_ocr_to_gdf(ocr_result_1)
         gdf_2 = self._sphere_ocr_to_gdf(ocr_result_2)
+
+        # If either result has invalid coordinates, cannot compute intersection
+        if gdf_1 is None or gdf_2 is None:
+            return None
 
         return self._get_intersection(gdf_1, gdf_2)
 
