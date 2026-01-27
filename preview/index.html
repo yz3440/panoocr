@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -97,7 +97,7 @@
           75,
           window.innerWidth / window.innerHeight,
           0.1,
-          1000
+          1000,
         );
         camera.position.set(0, 0, 0.1);
         updateZoom();
@@ -153,7 +153,7 @@
           const group = new THREE.Group();
           group.userData.isOCRResult = true;
           const sprite = createTextSprite(
-            `${result.text} (${(result.confidence * 100).toFixed(0)}%)`
+            `${result.text} (${(result.confidence * 100).toFixed(0)}%)`,
           );
           sprite.userData.originalScale = sprite.scale.clone();
           const boundingBoxGroup = createBoundingBox(result);
@@ -234,7 +234,7 @@
         group.position.set(
           ocrResultRadius * Math.sin(phi) * Math.cos(theta),
           ocrResultRadius * Math.cos(phi),
-          ocrResultRadius * Math.sin(phi) * Math.sin(theta)
+          ocrResultRadius * Math.sin(phi) * Math.sin(theta),
         );
 
         group.lookAt(0, 0, 0);
@@ -257,7 +257,7 @@
             sprite.scale.set(
               sprite.userData.originalScale.x,
               sprite.userData.originalScale.y,
-              1
+              1,
             );
             border.material.color.setHex(0xffff00);
           }
@@ -291,7 +291,7 @@
             sprite.scale.set(
               sprite.userData.originalScale.x * scaleFactor,
               sprite.userData.originalScale.y * scaleFactor,
-              1
+              1,
             );
 
             border.material.color.setHex(0xff0000);
