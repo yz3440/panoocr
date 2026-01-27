@@ -274,7 +274,7 @@
 <nav>
     <ul>
         <li><a href="#deduplication">Deduplication</a></li>
-        <li><a href="#algorithm">Algorithm</a></li><li><a href="#sphereocrduplicationdetectionengine">SphereOCRDuplicationDetectionEngine</a></li><li><a href="#panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SphereOCRDuplicationDetectionEngine</a></li><li><a href="#data-classes">Data Classes</a></li><li><a href="#panoocr.dedup.detection.RegionIntersection"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;RegionIntersection</a></li>
+        <li><a href="#algorithm">Algorithm</a></li><li><a href="#adaptive-processing-strategy">Adaptive Processing Strategy</a></li><li><a href="#sphereocrduplicationdetectionengine">SphereOCRDuplicationDetectionEngine</a></li><li><a href="#panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SphereOCRDuplicationDetectionEngine</a></li><li><a href="#data-classes">Data Classes</a></li><li><a href="#panoocr.dedup.detection.RegionIntersection"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;RegionIntersection</a></li>
     </ul>
 </nav>
 </aside>
@@ -285,11 +285,17 @@
 <h2 id="algorithm">Algorithm<a class="headerlink" href="#algorithm" title="Permanent link">#</a></h2>
 <p>OCR results are deduplicated using spatial overlap and text similarity:</p>
 <ol>
-<li>Process perspectives sequentially (adjacent pairs)</li>
 <li>For each result pair, check both text similarity and region overlap</li>
 <li>If texts are similar (Levenshtein) or overlapping, and regions intersect sufficiently, mark as duplicate</li>
 <li>Keep the result with longer text, or higher confidence if equal length</li>
 </ol>
+<h2 id="adaptive-processing-strategy">Adaptive Processing Strategy<a class="headerlink" href="#adaptive-processing-strategy" title="Permanent link">#</a></h2>
+<p>PanoOCR automatically selects the optimal deduplication strategy based on perspective arrangement:</p>
+<ul>
+<li><strong>Sequential pairwise (fast)</strong>: Used when perspectives form a simple horizontal ring (same pitch, sorted by yaw). Compares only adjacent perspective pairs plus wrap-around.</li>
+<li><strong>Incremental master list (thorough)</strong>: Used for arbitrary perspective arrangements (multiple pitch levels, custom arrangements). Compares each result against all previous results.</li>
+</ul>
+<p>This is handled automatically - no configuration needed.</p>
 <h2 id="sphereocrduplicationdetectionengine">SphereOCRDuplicationDetectionEngine<a class="headerlink" href="#sphereocrduplicationdetectionengine" title="Permanent link">#</a></h2>
 
 
@@ -977,6 +983,215 @@ or higher confidence if texts are equal length.</p>
 <a id="__codelineno-0-256" name="__codelineno-0-256"></a>        <span class="n">ocr_results_1</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 <a id="__codelineno-0-257" name="__codelineno-0-257"></a>
 <a id="__codelineno-0-258" name="__codelineno-0-258"></a>    <span class="k">return</span> <span class="n">ocr_results_0</span><span class="p">,</span> <span class="n">ocr_results_1</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.deduplicate_frames" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">deduplicate_frames</span>
+
+
+<a href="#panoocr.dedup.detection.SphereOCRDuplicationDetectionEngine.deduplicate_frames" class="headerlink" title="Permanent link">#</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">deduplicate_frames</span><span class="p">(</span><span class="n">frames</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Deduplicate OCR results across multiple frames using incremental merging.</p>
+<p>Processes frames one by one, maintaining a master list. Each result from
+a new frame is compared against the entire master list. When duplicates
+are found, keeps the result with longer text or higher confidence.</p>
+<p>This approach is slower than pairwise deduplication but handles arbitrary
+perspective arrangements correctly (e.g., multiple pitch levels, custom
+arrangements).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>frames</code>
+            </td>
+            <td>
+                  <code><span title="typing.List">List</span>[<span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="            SphereOCRResult
+
+
+  
+      dataclass
+   (panoocr.ocr.models.SphereOCRResult)" href="../ocr/#panoocr.ocr.models.SphereOCRResult">SphereOCRResult</a>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of frames, each containing a list of OCR results.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="            SphereOCRResult
+
+
+  
+      dataclass
+   (panoocr.ocr.models.SphereOCRResult)" href="../ocr/#panoocr.ocr.models.SphereOCRResult">SphereOCRResult</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Deduplicated list of sphere OCR results.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/panoocr/dedup/detection.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-284">284</a></span>
+<span class="normal"><a href="#__codelineno-0-285">285</a></span>
+<span class="normal"><a href="#__codelineno-0-286">286</a></span>
+<span class="normal"><a href="#__codelineno-0-287">287</a></span>
+<span class="normal"><a href="#__codelineno-0-288">288</a></span>
+<span class="normal"><a href="#__codelineno-0-289">289</a></span>
+<span class="normal"><a href="#__codelineno-0-290">290</a></span>
+<span class="normal"><a href="#__codelineno-0-291">291</a></span>
+<span class="normal"><a href="#__codelineno-0-292">292</a></span>
+<span class="normal"><a href="#__codelineno-0-293">293</a></span>
+<span class="normal"><a href="#__codelineno-0-294">294</a></span>
+<span class="normal"><a href="#__codelineno-0-295">295</a></span>
+<span class="normal"><a href="#__codelineno-0-296">296</a></span>
+<span class="normal"><a href="#__codelineno-0-297">297</a></span>
+<span class="normal"><a href="#__codelineno-0-298">298</a></span>
+<span class="normal"><a href="#__codelineno-0-299">299</a></span>
+<span class="normal"><a href="#__codelineno-0-300">300</a></span>
+<span class="normal"><a href="#__codelineno-0-301">301</a></span>
+<span class="normal"><a href="#__codelineno-0-302">302</a></span>
+<span class="normal"><a href="#__codelineno-0-303">303</a></span>
+<span class="normal"><a href="#__codelineno-0-304">304</a></span>
+<span class="normal"><a href="#__codelineno-0-305">305</a></span>
+<span class="normal"><a href="#__codelineno-0-306">306</a></span>
+<span class="normal"><a href="#__codelineno-0-307">307</a></span>
+<span class="normal"><a href="#__codelineno-0-308">308</a></span>
+<span class="normal"><a href="#__codelineno-0-309">309</a></span>
+<span class="normal"><a href="#__codelineno-0-310">310</a></span>
+<span class="normal"><a href="#__codelineno-0-311">311</a></span>
+<span class="normal"><a href="#__codelineno-0-312">312</a></span>
+<span class="normal"><a href="#__codelineno-0-313">313</a></span>
+<span class="normal"><a href="#__codelineno-0-314">314</a></span>
+<span class="normal"><a href="#__codelineno-0-315">315</a></span>
+<span class="normal"><a href="#__codelineno-0-316">316</a></span>
+<span class="normal"><a href="#__codelineno-0-317">317</a></span>
+<span class="normal"><a href="#__codelineno-0-318">318</a></span>
+<span class="normal"><a href="#__codelineno-0-319">319</a></span>
+<span class="normal"><a href="#__codelineno-0-320">320</a></span>
+<span class="normal"><a href="#__codelineno-0-321">321</a></span>
+<span class="normal"><a href="#__codelineno-0-322">322</a></span>
+<span class="normal"><a href="#__codelineno-0-323">323</a></span>
+<span class="normal"><a href="#__codelineno-0-324">324</a></span>
+<span class="normal"><a href="#__codelineno-0-325">325</a></span>
+<span class="normal"><a href="#__codelineno-0-326">326</a></span>
+<span class="normal"><a href="#__codelineno-0-327">327</a></span>
+<span class="normal"><a href="#__codelineno-0-328">328</a></span>
+<span class="normal"><a href="#__codelineno-0-329">329</a></span>
+<span class="normal"><a href="#__codelineno-0-330">330</a></span>
+<span class="normal"><a href="#__codelineno-0-331">331</a></span>
+<span class="normal"><a href="#__codelineno-0-332">332</a></span>
+<span class="normal"><a href="#__codelineno-0-333">333</a></span>
+<span class="normal"><a href="#__codelineno-0-334">334</a></span>
+<span class="normal"><a href="#__codelineno-0-335">335</a></span>
+<span class="normal"><a href="#__codelineno-0-336">336</a></span>
+<span class="normal"><a href="#__codelineno-0-337">337</a></span>
+<span class="normal"><a href="#__codelineno-0-338">338</a></span>
+<span class="normal"><a href="#__codelineno-0-339">339</a></span>
+<span class="normal"><a href="#__codelineno-0-340">340</a></span>
+<span class="normal"><a href="#__codelineno-0-341">341</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-284" name="__codelineno-0-284"></a><span class="k">def</span><span class="w"> </span><span class="nf">deduplicate_frames</span><span class="p">(</span>
+<a id="__codelineno-0-285" name="__codelineno-0-285"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-286" name="__codelineno-0-286"></a>    <span class="n">frames</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">]],</span>
+<a id="__codelineno-0-287" name="__codelineno-0-287"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">]:</span>
+<a id="__codelineno-0-288" name="__codelineno-0-288"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Deduplicate OCR results across multiple frames using incremental merging.</span>
+<a id="__codelineno-0-289" name="__codelineno-0-289"></a>
+<a id="__codelineno-0-290" name="__codelineno-0-290"></a><span class="sd">    Processes frames one by one, maintaining a master list. Each result from</span>
+<a id="__codelineno-0-291" name="__codelineno-0-291"></a><span class="sd">    a new frame is compared against the entire master list. When duplicates</span>
+<a id="__codelineno-0-292" name="__codelineno-0-292"></a><span class="sd">    are found, keeps the result with longer text or higher confidence.</span>
+<a id="__codelineno-0-293" name="__codelineno-0-293"></a>
+<a id="__codelineno-0-294" name="__codelineno-0-294"></a><span class="sd">    This approach is slower than pairwise deduplication but handles arbitrary</span>
+<a id="__codelineno-0-295" name="__codelineno-0-295"></a><span class="sd">    perspective arrangements correctly (e.g., multiple pitch levels, custom</span>
+<a id="__codelineno-0-296" name="__codelineno-0-296"></a><span class="sd">    arrangements).</span>
+<a id="__codelineno-0-297" name="__codelineno-0-297"></a>
+<a id="__codelineno-0-298" name="__codelineno-0-298"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-299" name="__codelineno-0-299"></a><span class="sd">        frames: List of frames, each containing a list of OCR results.</span>
+<a id="__codelineno-0-300" name="__codelineno-0-300"></a>
+<a id="__codelineno-0-301" name="__codelineno-0-301"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-302" name="__codelineno-0-302"></a><span class="sd">        Deduplicated list of sphere OCR results.</span>
+<a id="__codelineno-0-303" name="__codelineno-0-303"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-304" name="__codelineno-0-304"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">frames</span><span class="p">:</span>
+<a id="__codelineno-0-305" name="__codelineno-0-305"></a>        <span class="k">return</span> <span class="p">[]</span>
+<a id="__codelineno-0-306" name="__codelineno-0-306"></a>
+<a id="__codelineno-0-307" name="__codelineno-0-307"></a>    <span class="c1"># Start with the first frame as the master list</span>
+<a id="__codelineno-0-308" name="__codelineno-0-308"></a>    <span class="n">master_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SphereOCRResult</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">frames</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<a id="__codelineno-0-309" name="__codelineno-0-309"></a>
+<a id="__codelineno-0-310" name="__codelineno-0-310"></a>    <span class="c1"># Process each subsequent frame</span>
+<a id="__codelineno-0-311" name="__codelineno-0-311"></a>    <span class="k">for</span> <span class="n">frame_results</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+<a id="__codelineno-0-312" name="__codelineno-0-312"></a>        <span class="k">for</span> <span class="n">new_result</span> <span class="ow">in</span> <span class="n">frame_results</span><span class="p">:</span>
+<a id="__codelineno-0-313" name="__codelineno-0-313"></a>            <span class="c1"># Check for overlaps with existing master list</span>
+<a id="__codelineno-0-314" name="__codelineno-0-314"></a>            <span class="n">duplicate_indices</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-315" name="__codelineno-0-315"></a>
+<a id="__codelineno-0-316" name="__codelineno-0-316"></a>            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">master_result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">master_list</span><span class="p">):</span>
+<a id="__codelineno-0-317" name="__codelineno-0-317"></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_duplication</span><span class="p">(</span><span class="n">new_result</span><span class="p">,</span> <span class="n">master_result</span><span class="p">):</span>
+<a id="__codelineno-0-318" name="__codelineno-0-318"></a>                    <span class="n">duplicate_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a id="__codelineno-0-319" name="__codelineno-0-319"></a>
+<a id="__codelineno-0-320" name="__codelineno-0-320"></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">duplicate_indices</span><span class="p">:</span>
+<a id="__codelineno-0-321" name="__codelineno-0-321"></a>                <span class="c1"># No duplicates found, add to master list</span>
+<a id="__codelineno-0-322" name="__codelineno-0-322"></a>                <span class="n">master_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_result</span><span class="p">)</span>
+<a id="__codelineno-0-323" name="__codelineno-0-323"></a>            <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-324" name="__codelineno-0-324"></a>                <span class="c1"># Found duplicates - select best result among all candidates</span>
+<a id="__codelineno-0-325" name="__codelineno-0-325"></a>                <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_result</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+<a id="__codelineno-0-326" name="__codelineno-0-326"></a>                    <span class="n">master_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">duplicate_indices</span>
+<a id="__codelineno-0-327" name="__codelineno-0-327"></a>                <span class="p">]</span>
+<a id="__codelineno-0-328" name="__codelineno-0-328"></a>
+<a id="__codelineno-0-329" name="__codelineno-0-329"></a>                <span class="c1"># Find the best result</span>
+<a id="__codelineno-0-330" name="__codelineno-0-330"></a>                <span class="n">best_result</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-0-331" name="__codelineno-0-331"></a>                <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+<a id="__codelineno-0-332" name="__codelineno-0-332"></a>                    <span class="n">best_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_best_result</span><span class="p">(</span><span class="n">best_result</span><span class="p">,</span> <span class="n">candidate</span><span class="p">)</span>
+<a id="__codelineno-0-333" name="__codelineno-0-333"></a>
+<a id="__codelineno-0-334" name="__codelineno-0-334"></a>                <span class="c1"># Remove all duplicates from master list (in reverse order)</span>
+<a id="__codelineno-0-335" name="__codelineno-0-335"></a>                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">duplicate_indices</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<a id="__codelineno-0-336" name="__codelineno-0-336"></a>                    <span class="n">master_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a id="__codelineno-0-337" name="__codelineno-0-337"></a>
+<a id="__codelineno-0-338" name="__codelineno-0-338"></a>                <span class="c1"># Add the best result</span>
+<a id="__codelineno-0-339" name="__codelineno-0-339"></a>                <span class="n">master_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_result</span><span class="p">)</span>
+<a id="__codelineno-0-340" name="__codelineno-0-340"></a>
+<a id="__codelineno-0-341" name="__codelineno-0-341"></a>    <span class="k">return</span> <span class="n">master_list</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
