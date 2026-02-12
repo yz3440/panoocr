@@ -100,14 +100,13 @@ engine = EasyOCREngine(config={
 
 ### PaddleOCREngine
 
-PaddlePaddle-based OCR with optional V4 server model for Chinese text.
+PaddlePaddle-based OCR supporting multiple languages with automatic model management. Uses PP-OCRv5 by default.
 
 ```python
 from panoocr.engines.paddleocr import PaddleOCREngine, PaddleOCRLanguageCode
 
 engine = PaddleOCREngine(config={
     "language_preference": PaddleOCRLanguageCode.CHINESE,
-    "use_v4_server": True,
 })
 ```
 

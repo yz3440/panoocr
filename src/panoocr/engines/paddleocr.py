@@ -4,15 +4,19 @@ This module provides OCR using PaddlePaddle's PaddleOCR library.
 Supports multiple languages and runs on CPU or GPU.
 
 Install with: pip install "panoocr[paddleocr]"
+
+Note:
+    PaddleOCR 3.x has a significantly different API from 2.x.
+    This engine supports PaddleOCR >= 3.0.0. For older versions,
+    please upgrade with: pip install --upgrade paddleocr
 """
 
 from __future__ import annotations
 
 import os
-import tarfile
+import warnings
 from dataclasses import dataclass
 from enum import Enum
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import numpy as np
@@ -30,7 +34,20 @@ def _check_paddleocr_dependencies():
             "PaddleOCR dependencies not installed.\n\n"
             "Install with:\n"
             "  pip install 'panoocr[paddleocr]'\n\n"
-            "For GPU support, install paddlepaddle-gpu instead of paddlepaddle."
+            "You also need PaddlePaddle:\n"
+            "  pip install paddlepaddle\n"
+            "For GPU support, install paddlepaddle-gpu instead."
+        )
+
+    try:
+        import paddle
+    except ImportError:
+        raise ImportError(
+            "PaddlePaddle framework not installed.\n\n"
+            "Install with:\n"
+            "  pip install paddlepaddle\n\n"
+            "For GPU support:\n"
+            "  pip install paddlepaddle-gpu"
         )
 
 
@@ -45,17 +62,16 @@ class PaddleOCRLanguageCode(Enum):
     JAPANESE = "japan"
 
 
+class PaddleOCRVersion(Enum):
+    """Supported PaddleOCR model versions."""
+
+    PP_OCRV3 = "PP-OCRv3"
+    PP_OCRV4 = "PP-OCRv4"
+    PP_OCRV5 = "PP-OCRv5"
+
+
 DEFAULT_LANGUAGE = PaddleOCRLanguageCode.ENGLISH
 DEFAULT_RECOGNIZE_UPSIDE_DOWN = False
-
-# PP-OCR V4 Server model URLs
-PP_OCR_V4_SERVER = {
-    "detection_model": "https://paddleocr.bj.bcebos.com/models/PP-OCRv4/chinese/ch_PP-OCRv4_det_server_infer.tar",
-    "detection_yml": "https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/configs/det/ch_PP-OCRv4/ch_PP-OCRv4_det_teacher.yml",
-    "recognition_model": "https://paddleocr.bj.bcebos.com/models/PP-OCRv4/chinese/ch_PP-OCRv4_rec_server_infer.tar",
-    "recognition_yml": "https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/configs/rec/PP-OCRv4/ch_PP-OCRv4_rec_hgnet.yml",
-    "cls_model": "https://paddleocr.bj.bcebos.com/dygraph_v2.0/ch/ch_ppocr_mobile_v2.0_cls_slim_infer.tar",
-}
 
 
 @dataclass
@@ -67,7 +83,6 @@ class PaddleOCRResult:
     confidence: float
     image_width: int
     image_height: int
-    use_v4_server: bool
 
     def to_flat(self) -> FlatOCRResult:
         """Convert to FlatOCRResult with normalized coordinates."""
@@ -75,8 +90,6 @@ class PaddleOCRResult:
         right = max(p[0] for p in self.bounding_box)
         top = min(p[1] for p in self.bounding_box)
         bottom = max(p[1] for p in self.bounding_box)
-
-        engine_name = "PADDLE_OCR_SERVER_V4" if self.use_v4_server else "PADDLE_OCR"
 
         return FlatOCRResult(
             text=self.text,
@@ -89,34 +102,32 @@ class PaddleOCRResult:
                 width=(right - left) / self.image_width,
                 height=(bottom - top) / self.image_height,
             ),
-            engine=engine_name,
+            engine="PADDLE_OCR",
         )
 
 
 class PaddleOCREngine:
-    """OCR engine using PaddleOCR library.
+    """OCR engine using PaddleOCR library (v3.x).
 
     PaddleOCR is developed by PaddlePaddle and supports multiple languages.
-    It provides good accuracy and can optionally use the V4 server model
-    for better results on Chinese text.
+    It provides good accuracy with automatic model management.
 
     Attributes:
         language_preference: Language code for recognition.
-        recognize_upside_down: Whether to use angle classifier.
-        use_v4_server: Whether to use the V4 server model.
+        recognize_upside_down: Whether to use textline orientation classifier.
+        ocr_version: The PP-OCR model version to use.
 
     Example:
         >>> from panoocr.engines.paddleocr import PaddleOCREngine, PaddleOCRLanguageCode
         >>>
         >>> engine = PaddleOCREngine(config={
         ...     "language_preference": PaddleOCRLanguageCode.CHINESE,
-        ...     "use_gpu": True,
         ... })
         >>> results = engine.recognize(image)
 
     Note:
-        Install with: pip install "panoocr[paddleocr]"
-        For GPU support, install paddlepaddle-gpu.
+        Install with: pip install "panoocr[paddleocr]" paddlepaddle
+        For GPU support, install paddlepaddle-gpu instead.
     """
 
     def __init__(self, config: Dict[str, Any] | None = None) -> None:
@@ -125,13 +136,17 @@ class PaddleOCREngine:
         Args:
             config: Configuration dictionary with optional keys:
                 - language_preference: PaddleOCRLanguageCode value.
-                - recognize_upside_down: Enable angle classifier (default: False).
-                - use_v4_server: Use V4 server model for better Chinese OCR.
-                - use_gpu: Whether to use GPU (default: True).
-                - model_dir: Custom directory for V4 server models.
+                - recognize_upside_down: Enable textline orientation classifier
+                  (default: False).
+                - ocr_version: PaddleOCRVersion or string like "PP-OCRv5"
+                  (default: auto-selected by PaddleOCR based on language).
+                - text_detection_model_name: Override detection model name.
+                - text_recognition_model_name: Override recognition model name.
+                - text_det_limit_side_len: Max side length for detection input.
+                - text_rec_score_thresh: Minimum recognition score threshold.
 
         Raises:
-            ImportError: If paddleocr is not installed.
+            ImportError: If paddleocr or paddlepaddle is not installed.
             ValueError: If configuration values are invalid.
         """
         # Check dependencies first
@@ -150,68 +165,70 @@ class PaddleOCREngine:
         except (KeyError, AttributeError):
             raise ValueError("Invalid language code")
 
-        # Parse other settings
+        # Parse textline orientation (replaces use_angle_cls from v2)
         self.recognize_upside_down = config.get(
             "recognize_upside_down", DEFAULT_RECOGNIZE_UPSIDE_DOWN
         )
         if not isinstance(self.recognize_upside_down, bool):
             raise ValueError("recognize_upside_down must be a boolean")
 
-        self.use_v4_server = config.get("use_v4_server", False)
-        if not isinstance(self.use_v4_server, bool):
-            raise ValueError("use_v4_server must be a boolean")
+        # Parse OCR version
+        ocr_version = config.get("ocr_version", None)
+        if isinstance(ocr_version, PaddleOCRVersion):
+            ocr_version = ocr_version.value
+        self.ocr_version = ocr_version
 
-        use_gpu = config.get("use_gpu", True)
-        self.model_dir = config.get("model_dir", "./models")
-
-        # Initialize OCR engine
-        if not self.use_v4_server:
-            self.ocr = PaddleOCR(
-                use_angle_cls=self.recognize_upside_down,
-                lang=self.language_preference,
-                use_gpu=use_gpu,
+        # Handle deprecated use_v4_server config
+        if config.get("use_v4_server", False):
+            warnings.warn(
+                "use_v4_server is deprecated in PaddleOCR 3.x. "
+                "Use ocr_version='PP-OCRv4' instead. "
+                "Model management is now handled automatically by PaddleOCR.",
+                DeprecationWarning,
+                stacklevel=2,
             )
-        else:
-            # Download and setup V4 server models
-            self._download_v4_server_models()
+            if ocr_version is None:
+                ocr_version = "PP-OCRv4"
 
-            model_base = Path(self.model_dir) / "PP-OCRv4" / "chinese"
-            self.ocr = PaddleOCR(
-                use_angle_cls=self.recognize_upside_down,
-                det_model_dir=str(model_base / "ch_PP-OCRv4_det_server_infer"),
-                det_algorithm="DB",
-                rec_model_dir=str(model_base / "ch_PP-OCRv4_rec_server_infer"),
-                rec_algorithm="CRNN",
-                cls_model_dir=str(model_base / "ch_ppocr_mobile_v2.0_cls_slim_infer"),
-                use_gpu=use_gpu,
+        # Handle deprecated use_gpu config
+        if "use_gpu" in config:
+            warnings.warn(
+                "use_gpu is deprecated in PaddleOCR 3.x. "
+                "GPU/CPU device selection is now automatic.",
+                DeprecationWarning,
+                stacklevel=2,
             )
 
-    def _download_v4_server_models(self) -> None:
-        """Download PP-OCR V4 server models if not present."""
-        import requests
+        # Build PaddleOCR kwargs
+        ocr_kwargs: Dict[str, Any] = {
+            "lang": self.language_preference,
+            "use_textline_orientation": self.recognize_upside_down,
+            # Disable document preprocessing for perspective images
+            # (these are designed for scanned documents, not perspective crops)
+            "use_doc_orientation_classify": False,
+            "use_doc_unwarping": False,
+        }
 
-        model_base = Path(self.model_dir) / "PP-OCRv4" / "chinese"
-        model_base.mkdir(parents=True, exist_ok=True)
+        if ocr_version is not None:
+            ocr_kwargs["ocr_version"] = ocr_version
 
-        models_to_download = [
-            ("detection_model", "ch_PP-OCRv4_det_server_infer"),
-            ("recognition_model", "ch_PP-OCRv4_rec_server_infer"),
-            ("cls_model", "ch_ppocr_mobile_v2.0_cls_slim_infer"),
-        ]
+        # Allow custom model overrides
+        for key in (
+            "text_detection_model_name",
+            "text_detection_model_dir",
+            "text_recognition_model_name",
+            "text_recognition_model_dir",
+            "text_det_limit_side_len",
+            "text_rec_score_thresh",
+        ):
+            if key in config:
+                ocr_kwargs[key] = config[key]
 
-        for key, folder_name in models_to_download:
-            tar_path = model_base / f"{folder_name}.tar"
-            folder_path = model_base / folder_name
+        # Suppress connectivity check if env var is not set
+        if "PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK" not in os.environ:
+            os.environ["PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK"] = "True"
 
-            if not folder_path.exists():
-                if not tar_path.exists():
-                    print(f"Downloading {folder_name}...")
-                    r = requests.get(PP_OCR_V4_SERVER[key], allow_redirects=True)
-                    tar_path.write_bytes(r.content)
-
-                print(f"Extracting {folder_name}...")
-                with tarfile.open(tar_path) as tar:
-                    tar.extractall(model_base)
+        self.ocr = PaddleOCR(**ocr_kwargs)
 
     def recognize(self, image: Image.Image) -> List[FlatOCRResult]:
         """Recognize text in an image.
@@ -224,34 +241,37 @@ class PaddleOCREngine:
         """
         image_array = np.array(image)
 
-        # Use slicing for large images
-        slice_config = {
-            "horizontal_stride": 300,
-            "vertical_stride": 500,
-            "merge_x_thres": 50,
-            "merge_y_thres": 35,
-        }
-
-        annotations = self.ocr.ocr(image_array, cls=True, slice=slice_config)
+        # Use the predict API (PaddleOCR 3.x)
+        results_iter = self.ocr.predict(image_array)
 
         paddle_results = []
-        for annotation in annotations:
-            if not isinstance(annotation, list):
-                continue
+        for result in results_iter:
+            # PaddleOCR 3.x returns OCRResult objects with:
+            # - rec_texts: list of recognized text strings
+            # - rec_scores: list of confidence scores
+            # - dt_polys: list of detection polygons (numpy arrays)
+            texts = result.get("rec_texts", []) if hasattr(result, "get") else getattr(result, "rec_texts", [])
+            scores = result.get("rec_scores", []) if hasattr(result, "get") else getattr(result, "rec_scores", [])
+            polys = result.get("dt_polys", []) if hasattr(result, "get") else getattr(result, "dt_polys", [])
 
-            for res in annotation:
-                bounding_box = res[0]
-                text = res[1][0]
-                confidence = res[1][1]
+            for text, score, poly in zip(texts, scores, polys):
+                # Skip empty or very low confidence results
+                if not text or not text.strip():
+                    continue
+
+                # Convert numpy array polygon to list of [x, y] points
+                if hasattr(poly, "tolist"):
+                    bounding_box = poly.tolist()
+                else:
+                    bounding_box = list(poly)
 
                 paddle_results.append(
                     PaddleOCRResult(
                         text=text,
-                        confidence=confidence,
+                        confidence=float(score),
                         bounding_box=bounding_box,
                         image_width=image.width,
                         image_height=image.height,
-                        use_v4_server=self.use_v4_server,
                     )
                 )
 

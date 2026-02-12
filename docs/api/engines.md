@@ -40,7 +40,7 @@ pip install "panoocr[easyocr]"
 
 ## PaddleOCREngine
 
-PaddlePaddle-based OCR with optional V4 server model for Chinese text. Requires the `[paddleocr]` extra.
+PaddlePaddle-based OCR supporting multiple languages with automatic model management. Uses PP-OCRv5 by default. Requires the `[paddleocr]` extra (includes both `paddleocr` and `paddlepaddle`).
 
 ```bash
 pip install "panoocr[paddleocr]"
