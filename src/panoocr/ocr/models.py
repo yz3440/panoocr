@@ -6,6 +6,8 @@ import math
 from dataclasses import dataclass
 from typing import Optional
 
+from panoocr.geometry import perspective_to_sphere
+
 
 @dataclass
 class BoundingBox:
@@ -90,34 +92,6 @@ class FlatOCRResult:
             engine=data.get("engine"),
         )
 
-    def _uv_to_yaw_pitch(
-        self, horizontal_fov: float, vertical_fov: float, u: float, v: float
-    ) -> tuple[float, float]:
-        """Convert UV coordinate to yaw and pitch using camera parameters.
-
-        All parameters are in degrees.
-
-        Args:
-            horizontal_fov: Horizontal field of view of the camera.
-            vertical_fov: Vertical field of view of the camera.
-            u: Horizontal coordinate on flat image (0-1).
-            v: Vertical coordinate on flat image (0-1).
-
-        Returns:
-            Tuple of (yaw, pitch) in degrees.
-        """
-        if horizontal_fov <= 0 or vertical_fov <= 0:
-            raise ValueError("FOV must be positive")
-
-        # Translate origin to center of image
-        u = u - 0.5
-        v = 0.5 - v
-
-        yaw = math.atan2(2 * u * math.tan(math.radians(horizontal_fov) / 2), 1)
-        pitch = math.atan2(2 * v * math.tan(math.radians(vertical_fov) / 2), 1)
-
-        return math.degrees(yaw), math.degrees(pitch)
-
     def to_sphere(
         self,
         horizontal_fov: float,
@@ -126,6 +100,11 @@ class FlatOCRResult:
         pitch_offset: float,
     ) -> "SphereOCRResult":
         """Convert to spherical OCR result using camera parameters.
+
+        Uses proper 3D rotation via perspective_to_sphere() to correctly
+        transform bounding box coordinates from perspective image space to
+        world spherical coordinates. This accounts for the coupling between
+        yaw and pitch that occurs when the camera has a non-zero pitch offset.
 
         All parameters are in degrees.
 
@@ -141,34 +120,53 @@ class FlatOCRResult:
         if horizontal_fov <= 0 or vertical_fov <= 0:
             raise ValueError("FOV must be positive")
 
-        # Calculate center point
+        # Convert center point using proper 3D rotation
         center_x = (self.bounding_box.left + self.bounding_box.right) * 0.5
         center_y = (self.bounding_box.top + self.bounding_box.bottom) * 0.5
 
-        center_yaw, center_pitch = self._uv_to_yaw_pitch(
-            horizontal_fov, vertical_fov, center_x, center_y
+        center_yaw, center_pitch = perspective_to_sphere(
+            center_x, center_y,
+            horizontal_fov, vertical_fov,
+            yaw_offset, pitch_offset,
         )
 
-        # Calculate corners for width/height
-        left_yaw, top_pitch = self._uv_to_yaw_pitch(
-            horizontal_fov, vertical_fov, self.bounding_box.left, self.bounding_box.top
+        # Convert all four corners using proper 3D rotation
+        tl_yaw, tl_pitch = perspective_to_sphere(
+            self.bounding_box.left, self.bounding_box.top,
+            horizontal_fov, vertical_fov, yaw_offset, pitch_offset,
+        )
+        tr_yaw, tr_pitch = perspective_to_sphere(
+            self.bounding_box.right, self.bounding_box.top,
+            horizontal_fov, vertical_fov, yaw_offset, pitch_offset,
+        )
+        bl_yaw, bl_pitch = perspective_to_sphere(
+            self.bounding_box.left, self.bounding_box.bottom,
+            horizontal_fov, vertical_fov, yaw_offset, pitch_offset,
+        )
+        br_yaw, br_pitch = perspective_to_sphere(
+            self.bounding_box.right, self.bounding_box.bottom,
+            horizontal_fov, vertical_fov, yaw_offset, pitch_offset,
         )
 
-        right_yaw, bottom_pitch = self._uv_to_yaw_pitch(
-            horizontal_fov,
-            vertical_fov,
-            self.bounding_box.right,
-            self.bounding_box.bottom,
-        )
+        # Compute angular width and height from world-space corners
+        corner_yaws = [tl_yaw, tr_yaw, bl_yaw, br_yaw]
+        corner_pitches = [tl_pitch, tr_pitch, bl_pitch, br_pitch]
 
-        width = right_yaw - left_yaw
-        height = top_pitch - bottom_pitch
+        # Handle yaw wrap-around at ±180° boundary
+        yaw_range = max(corner_yaws) - min(corner_yaws)
+        if yaw_range > 180:
+            shifted_yaws = [y + 360 if y < 0 else y for y in corner_yaws]
+            width = max(shifted_yaws) - min(shifted_yaws)
+        else:
+            width = yaw_range
+
+        height = max(corner_pitches) - min(corner_pitches)
 
         return SphereOCRResult(
             text=self.text,
             confidence=self.confidence,
-            yaw=center_yaw + yaw_offset,
-            pitch=center_pitch + pitch_offset,
+            yaw=center_yaw,
+            pitch=center_pitch,
             width=width,
             height=height,
             engine=self.engine,
