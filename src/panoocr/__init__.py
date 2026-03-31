@@ -25,7 +25,7 @@ Install OCR engine dependencies:
     - Cross-platform local engines: pip install "panoocr[full]"
 """
 
-__version__ = "0.4.1"
+__version__ = "0.5.0"
 
 # Pipeline-first public API
 from .api import (
