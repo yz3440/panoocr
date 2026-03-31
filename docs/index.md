@@ -11,10 +11,16 @@ pip install "panoocr @ git+https://github.com/yz3440/panoocr.git"
 # With MacOCR (macOS only)
 pip install "panoocr[macocr]"
 
+# With RapidOCR (PP-OCRv4/v5 via ONNX Runtime)
+pip install "panoocr[rapidocr]"
+
 # With EasyOCR (cross-platform)
 pip install "panoocr[easyocr]"
 
-# With all engines
+# With MLX VLMs (Florence-2 MLX, GLM-OCR, DOTS.OCR — macOS Apple Silicon)
+pip install "panoocr[mlx-vlm]" torch torchvision
+
+# Cross-platform local engines + visualization
 pip install "panoocr[full] @ git+https://github.com/yz3440/panoocr.git"
 ```
 
