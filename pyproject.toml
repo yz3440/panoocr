@@ -65,8 +65,28 @@ viz = [
     "matplotlib>=3.7.0",
     "scipy>=1.10.0",
 ]
-# Full install with all features (excluding platform-specific macocr)
-full = ["panoocr[easyocr,paddleocr,florence2,viz]"]
+# RapidOCR engine (PP-OCRv4/v5 via ONNX Runtime)
+rapidocr = [
+    "rapidocr",
+    "onnxruntime",
+]
+# Google Cloud Vision API engine (uses REST API with API key)
+google-vision = [
+    "requests>=2.28.0",
+]
+# MLX VLM engines (Florence-2 MLX, GLM-OCR, DOTS.OCR)
+mlx-vlm = [
+    "mlx-vlm",
+    "torch>=2.0.0",
+    "torchvision",
+]
+# Gemini API engine
+gemini = [
+    "google-genai",
+]
+# Local cross-platform engines + visualization (excludes macOS-only macocr,
+# Apple Silicon mlx-vlm, cloud APIs google-vision/gemini, and experimental trocr)
+full = ["panoocr[easyocr,paddleocr,florence2,rapidocr,viz]"]
 # Documentation dependencies - install with: pip install "panoocr[docs]"
 docs = [
     "mkdocs>=1.5.0",

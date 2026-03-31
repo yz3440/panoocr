@@ -12,7 +12,6 @@ import gc
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
-import numpy as np
 from PIL import Image
 
 from ..ocr.models import BoundingBox, FlatOCRResult

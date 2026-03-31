@@ -6,7 +6,7 @@ https://github.com/user-attachments/assets/57507c48-ec88-4d4a-bf68-067eefc9d42f
 
 ## Features
 
-- **Multiple OCR Engines**: Support for MacOCR (Apple Vision), EasyOCR, PaddleOCR, Florence-2, and TrOCR
+- **Multiple OCR Engines**: Support for MacOCR (Apple Vision), RapidOCR, EasyOCR, PaddleOCR, Florence-2, Google Cloud Vision, Gemini, and more
 - **Automatic Perspective Projection**: Converts equirectangular panoramas to multiple perspective views for better OCR accuracy
 - **Deduplication**: Automatically removes duplicate text detections across overlapping perspective views
 - **Spherical Coordinates**: Returns OCR results in yaw/pitch coordinates that map directly to the panorama
@@ -26,16 +26,29 @@ Install with OCR engine dependencies:
 # macOS (Apple Vision Framework)
 pip install "panoocr[macocr]"
 
+# RapidOCR (PP-OCRv4/v5 via ONNX Runtime, cross-platform)
+pip install "panoocr[rapidocr]"
+
 # EasyOCR (cross-platform)
 pip install "panoocr[easyocr]"
 
 # PaddleOCR (cross-platform)
 pip install "panoocr[paddleocr]"
 
-# Florence-2 (requires GPU recommended)
+# Florence-2 via transformers + torch (requires GPU recommended)
 pip install "panoocr[florence2]"
 
-# All engines (excluding platform-specific macocr)
+# MLX VLM engines: Florence-2 MLX, GLM-OCR, DOTS.OCR (macOS Apple Silicon)
+pip install "panoocr[mlx-vlm]"
+
+# Google Cloud Vision API (requires API key)
+pip install "panoocr[google-vision]"
+
+# Gemini API (requires API key)
+pip install "panoocr[gemini]"
+
+# Cross-platform local engines + visualization
+# (excludes macOS-only macocr, Apple Silicon mlx-vlm, cloud APIs, and experimental trocr)
 pip install "panoocr[full]"
 ```
 
@@ -43,7 +56,9 @@ Using uv (recommended):
 
 ```bash
 uv add panoocr
-uv add "panoocr[macocr]"  # or other extras
+uv sync --extra macocr      # or other extras
+uv sync --extra rapidocr
+uv sync --extra mlx-vlm     # Florence-2 MLX, GLM-OCR, DOTS.OCR
 ```
 
 ## Quick Start
@@ -73,53 +88,122 @@ for r in result.results:
 
 ## Available OCR Engines
 
-### MacOCREngine (macOS only)
+### Structured engines (return per-word bounding boxes)
+
+#### MacOCREngine (macOS only)
 
 Uses Apple's Vision Framework for fast, accurate OCR on macOS.
 
 ```python
-from panoocr.engines.macocr import MacOCREngine, MacOCRLanguageCode
+from panoocr.engines.macocr import MacOCREngine
 
-engine = MacOCREngine(config={
-    "language_preference": [MacOCRLanguageCode.ENGLISH_US],
-})
+engine = MacOCREngine()
 ```
 
-### EasyOCREngine
+#### RapidOCREngine
+
+PaddleOCR PP-OCRv4/v5 models via ONNX Runtime. Supports both v4 (2023) and v5 (2025) models, multilingual including CJK.
+
+```python
+from panoocr.engines.rapidocr_engine import RapidOCREngine
+
+engine_v4 = RapidOCREngine()                                     # default: PP-OCRv4
+engine_v5 = RapidOCREngine(config={"ocr_version": "PP-OCRv5"})   # PP-OCRv5
+```
+
+#### EasyOCREngine
 
 Cross-platform OCR supporting 80+ languages.
 
 ```python
-from panoocr.engines.easyocr import EasyOCREngine, EasyOCRLanguageCode
+from panoocr.engines.easyocr import EasyOCREngine
 
-engine = EasyOCREngine(config={
-    "language_preference": [EasyOCRLanguageCode.ENGLISH],
-    "gpu": True,
-})
+engine = EasyOCREngine(config={"language_preference": ["en"], "gpu": True})
 ```
 
-### PaddleOCREngine
+#### PaddleOCREngine
 
-PaddlePaddle-based OCR supporting multiple languages with automatic model management. Uses PP-OCRv5 by default.
+PaddlePaddle-based OCR supporting multiple languages with automatic model management.
 
 ```python
-from panoocr.engines.paddleocr import PaddleOCREngine, PaddleOCRLanguageCode
+from panoocr.engines.paddleocr import PaddleOCREngine
 
-engine = PaddleOCREngine(config={
-    "language_preference": PaddleOCRLanguageCode.CHINESE,
-})
+engine = PaddleOCREngine()
 ```
 
-### Florence2OCREngine
+#### GoogleVisionEngine
 
-Microsoft's Florence-2 vision-language model for OCR.
+Google Cloud Vision API (`TEXT_DETECTION`). Requires `GOOGLE_VISION_API_KEY` in environment or `.env`.
+
+```python
+from panoocr.engines.google_vision import GoogleVisionEngine
+
+engine = GoogleVisionEngine()
+```
+
+#### Florence2OCREngine (transformers + torch)
+
+Microsoft's Florence-2 vision-language model via transformers.
 
 ```python
 from panoocr.engines.florence2 import Florence2OCREngine
 
-engine = Florence2OCREngine(config={
-    "model_id": "microsoft/Florence-2-large",
-})
+engine = Florence2OCREngine()
+```
+
+#### Florence2MLXEngine (mlx-vlm, macOS Apple Silicon)
+
+Florence-2 via mlx-vlm with `<OCR_WITH_REGION>` for structured quad-box output. The only VLM engine that returns per-word bounding boxes.
+
+```python
+from panoocr.engines.florence2_mlx import Florence2MLXEngine
+
+engine = Florence2MLXEngine()
+```
+
+### Unstructured engines (return text without bounding boxes)
+
+These engines return text only. Each detection gets a full-image bounding box for crop-level attribution in the panoocr pipeline.
+
+#### GeminiEngine
+
+Google Gemini API. Supports multiple model variants. Requires `GOOGLE_GEMINI_API_KEY` in environment or `.env`.
+
+```python
+from panoocr.engines.gemini import GeminiEngine
+
+engine_flash = GeminiEngine(config={"model": "gemini-2.5-flash"})
+engine_pro = GeminiEngine(config={"model": "gemini-2.5-pro"})
+```
+
+#### GlmOCREngine (mlx-vlm, macOS Apple Silicon)
+
+GLM-OCR (0.9B) via mlx-vlm. Document-focused VLM -- limited effectiveness on scene text.
+
+```python
+from panoocr.engines.glm_ocr import GlmOCREngine
+
+engine = GlmOCREngine()
+```
+
+#### DotsOCREngine (mlx-vlm, macOS Apple Silicon)
+
+DOTS.OCR (2.9B) via mlx-vlm. Document layout parser -- limited effectiveness on scene text.
+
+```python
+from panoocr.engines.dots_ocr import DotsOCREngine
+
+engine = DotsOCREngine()
+```
+
+#### TrOCREngine (experimental)
+
+Microsoft's TrOCR transformer-based single-line OCR. Does not detect text regions -- treats the entire image as one text line. Experimental; consider other engines for panorama OCR.
+
+```python
+from panoocr.engines.trocr import TrOCREngine
+
+engine = TrOCREngine()
 ```
 
 ## Advanced Usage

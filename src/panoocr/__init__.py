@@ -15,13 +15,17 @@ Example:
 
 Install OCR engine dependencies:
     - MacOCR (macOS): pip install "panoocr[macocr]"
+    - RapidOCR: pip install "panoocr[rapidocr]"
     - EasyOCR: pip install "panoocr[easyocr]"
     - PaddleOCR: pip install "panoocr[paddleocr]"
-    - Florence-2: pip install "panoocr[florence2]"
-    - All engines: pip install "panoocr[full]"
+    - Florence-2 (torch): pip install "panoocr[florence2]"
+    - MLX VLMs (Florence-2 MLX, GLM-OCR, DOTS.OCR): pip install "panoocr[mlx-vlm]"
+    - Google Cloud Vision: pip install "panoocr[google-vision]"
+    - Gemini: pip install "panoocr[gemini]"
+    - Cross-platform local engines: pip install "panoocr[full]"
 """
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 # Pipeline-first public API
 from .api import (
